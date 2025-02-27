@@ -67,6 +67,71 @@ def clean_response(response: str) -> str:
 	return ''.join([i if ord(i) < 128 else '-' for i in response.lower().strip()])  # remove non-ascii
 
 
+def get_movie_from_response(response: str) -> str:
+	cleaned = clean_response(response)
+	# cleaned = re.sub(r'\bthe\b', '', cleaned) #remove all the
+	title = re.sub(r"[^a-z0-9'\s]", '', cleaned) #remove all punctuation except ' and spaces
+	title = title.strip()
+
+	if not title or any(value in title for value in {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable'}):
+		return 'None'
+	return title
+
+def get_drink_from_response(response: str) -> str:
+	cleaned = clean_response(response)
+
+	drink = re.sub(r"[^a-z0-9\s]", '', cleaned) #remove all punctuation except ' and spaces
+	drink = drink.strip()
+
+	if not drink or any(value in drink for value in {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable'}):
+		return 'none'
+	if any(value in drink.lower() for value in {'coke', 'cola', 'coca cola', 'coka-cola'}):
+		return 'coca cola'
+	if any(value in drink.lower() for value in {'pepsi'}):
+		return 'pepsi'
+	if any(value in drink.lower() for value in {'sparkling water'}):
+		return 'sparkling water'
+	if any(value in drink.lower() for value in {'water'}):
+		return 'water'
+	if any(value in drink.lower() for value in {'iced tea', 'ice tea'}):
+		return 'ice tea'
+	if any(value in drink.lower() for value in {'milk'}):
+		return 'milk'
+	if any(value in drink.lower() for value in {'bubble tea'}):
+		return 'bubble tea'
+	
+	return drink
+
+def second_movie_clean(movies: dict) -> dict:
+    avengers_key = "avengers"
+    endgame_key = "avengers endgame"
+    
+    # Create temporary storage for counts
+    avengers_count = movies.get(avengers_key, 0)
+    endgame_count = movies.get(endgame_key, 0)
+    
+    for movie in list(movies.keys()):
+        count = movies[movie]
+        
+        # Check for Endgame variants first
+        if 'endgame' in movie and 'avenger' in movie:
+            if movie != endgame_key:
+                endgame_count += count
+                del movies[movie]
+        
+        # Then check general Avengers variants
+        elif 'avenger' in movie and '2012' not in movie:
+            if movie != avengers_key:
+                avengers_count += count
+                del movies[movie]
+    
+    # Update main entries
+    movies[avengers_key] = avengers_count
+    movies[endgame_key] = endgame_count
+    
+    return movies
+
+
 data_csv = pd.read_csv("cleaned_data_combined.csv", keep_default_na=False)
 # Columns are
 # id
@@ -89,12 +154,15 @@ for line in data_csv.values:
 			cleaned_answer = get_number_from_response(answer, True)
 		elif i in {4}:
 			cleaned_answer = get_number_from_response(answer, False)
-		elif i in {5, 6}:
-			cleaned_answer = clean_response(answer)
+		elif i in {5}:
+			cleaned_answer = get_movie_from_response(answer)
+		elif i in {6}:
+			cleaned_answer = get_drink_from_response(answer)
 		else:
 			cleaned_answer = answer
 		response_dict[i][cleaned_answer] = response_dict[i].get(cleaned_answer, 0) + 1
 
+response_dict[5] = second_movie_clean(response_dict[5])
 for i in range(10):
 	response_dict[i] = dict(sorted(response_dict[i].items(), key=lambda item: item[1], reverse=True))
 	print(f"{data_csv.columns[i]}:\n{response_dict[i]}")
