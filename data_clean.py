@@ -95,10 +95,22 @@ def get_drink_from_response(response: str) -> str:
 		return 'water'
 	if any(value in drink.lower() for value in {'iced tea', 'ice tea'}):
 		return 'ice tea'
-	if any(value in drink.lower() for value in {'milk'}):
-		return 'milk'
 	if any(value in drink.lower() for value in {'bubble tea'}):
 		return 'bubble tea'
+	if any(value in drink.lower() for value in {'green tea'}):
+		return 'green tea'
+	if any(value in drink.lower() for value in {'milk'}):
+		return 'milk'
+	if any(value in drink.lower() for value in {'tea'}):
+		return 'tea'
+	if any(value in drink.lower() for value in {'juice'}):
+		return 'juice'
+	if any(value in drink.lower() for value in {'pop', 'soda', 'sodapop', 'popsoda', 'pops', 'soft drink'}):
+		return 'pop'
+	if any(value in drink.lower() for value in {'beer', 'rootbeer'}):
+		return 'beer'
+	if any(value in drink.lower() for value in {'wine'}):
+		return 'wine'
 	
 	return drink
 
