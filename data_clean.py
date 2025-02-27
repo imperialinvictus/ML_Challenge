@@ -1,6 +1,8 @@
 import pandas as pd
 from word2num import Word2Num
 import regex as re
+import csv
+
 
 w2n = Word2Num(fuzzy_threshold=100)
 
@@ -107,7 +109,7 @@ def get_drink_from_response(response: str) -> str:
 		return 'juice'
 	if any(value in drink.lower() for value in {'canada dry'}):
 		return 'canada dry'
-	if any(value in drink.lower() for value in {'gingerale'}):
+	if any(value in drink.lower() for value in {'ginger ale', 'gingerale'}):
 		return 'gingerale'
 	if any(value in drink.lower() for value in {'pop', 'soda', 'sodapop', 'popsoda', 'pops', 'soft drink'}):
 		return 'pop'
@@ -182,3 +184,18 @@ response_dict[5] = second_movie_clean(response_dict[5])
 for i in range(10):
 	response_dict[i] = dict(sorted(response_dict[i].items(), key=lambda item: item[1], reverse=True))
 	print(f"{data_csv.columns[i]}:\n{response_dict[i]}")
+
+data_csv_clean = data_csv.copy()
+
+for i in range(10):
+    if i == 2:
+        data_csv_clean.iloc[:, i] = data_csv_clean.iloc[:, i].apply(lambda x: get_number_from_response(x, True))
+    elif i == 4:
+        data_csv_clean.iloc[:, i] = data_csv_clean.iloc[:, i].apply(lambda x: get_number_from_response(x, False))
+    elif i == 5:
+        data_csv_clean.iloc[:, i] = data_csv_clean.iloc[:, i].apply(get_movie_from_response)
+    elif i == 6:
+        data_csv_clean.iloc[:, i] = data_csv_clean.iloc[:, i].apply(get_drink_from_response)
+
+
+data_csv_clean.to_csv('cleaned_output.csv', index=False)
