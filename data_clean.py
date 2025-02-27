@@ -76,7 +76,14 @@ def get_movie_from_response(response: str) -> str:
 	title = title.strip()
 
 	if not title or any(value in title for value in {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable'}):
-		return 'None'
+		return 'none'
+	if any(value in title for value in {'avengers endgame', 'eng game', 'endgame'}):
+		return 'avengers endgame'
+	if any(value in title for value in {'avengers 2012'}):
+		return 'avengers 2012'
+	if any(value in title for value in {'avengers', 'avnagers', 'the avengers', 'avenengers', 'avangers'}):
+		return 'avengers'
+
 	return title
 
 def get_drink_from_response(response: str) -> str:
@@ -120,35 +127,6 @@ def get_drink_from_response(response: str) -> str:
 	
 	return drink
 
-def second_movie_clean(movies: dict) -> dict:
-    avengers_key = "avengers"
-    endgame_key = "avengers endgame"
-    
-    # Create temporary storage for counts
-    avengers_count = movies.get(avengers_key, 0)
-    endgame_count = movies.get(endgame_key, 0)
-    
-    for movie in list(movies.keys()):
-        count = movies[movie]
-        
-        # Check for Endgame variants first
-        if 'endgame' in movie and 'avenger' in movie:
-            if movie != endgame_key:
-                endgame_count += count
-                del movies[movie]
-        
-        # Then check general Avengers variants
-        elif 'avenger' in movie and '2012' not in movie:
-            if movie != avengers_key:
-                avengers_count += count
-                del movies[movie]
-    
-    # Update main entries
-    movies[avengers_key] = avengers_count
-    movies[endgame_key] = endgame_count
-    
-    return movies
-
 
 data_csv = pd.read_csv("cleaned_data_combined.csv", keep_default_na=False)
 # Columns are
@@ -180,7 +158,6 @@ for line in data_csv.values:
 			cleaned_answer = answer
 		response_dict[i][cleaned_answer] = response_dict[i].get(cleaned_answer, 0) + 1
 
-response_dict[5] = second_movie_clean(response_dict[5])
 for i in range(10):
 	response_dict[i] = dict(sorted(response_dict[i].items(), key=lambda item: item[1], reverse=True))
 	print(f"{data_csv.columns[i]}:\n{response_dict[i]}")
@@ -196,14 +173,5 @@ for i in range(10):
         data_csv_clean.iloc[:, i] = data_csv_clean.iloc[:, i].apply(get_movie_from_response)
     elif i == 6:
         data_csv_clean.iloc[:, i] = data_csv_clean.iloc[:, i].apply(get_drink_from_response)
-
-movie_counts = data_csv_clean.iloc[:, 5].value_counts().to_dict()
-
-cleaned_movie_counts = second_movie_clean(movie_counts)
-
-cleaned_movies_df = pd.DataFrame(
-    list(cleaned_movie_counts.items()),
-    columns=['Movie', 'Count']
-)
 
 data_csv_clean.to_csv('cleaned_output.csv', index=False)
