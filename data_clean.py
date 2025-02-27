@@ -197,5 +197,13 @@ for i in range(10):
     elif i == 6:
         data_csv_clean.iloc[:, i] = data_csv_clean.iloc[:, i].apply(get_drink_from_response)
 
+movie_counts = data_csv_clean.iloc[:, 5].value_counts().to_dict()
+
+cleaned_movie_counts = second_movie_clean(movie_counts)
+
+cleaned_movies_df = pd.DataFrame(
+    list(cleaned_movie_counts.items()),
+    columns=['Movie', 'Count']
+)
 
 data_csv_clean.to_csv('cleaned_output.csv', index=False)
