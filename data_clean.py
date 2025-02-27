@@ -75,7 +75,7 @@ def get_movie_from_response(response: str) -> str:
 	title = re.sub(r"[^a-z0-9'\s]", '', cleaned) #remove all punctuation except ' and spaces
 	title = title.strip()
 
-	if not title or any(value in title for value in {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable'}):
+	if not title or any(value in title for value in {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable', 'idk'}):
 		return 'none'
 	if any(value in title for value in {'avengers endgame', 'eng game', 'endgame'}):
 		return 'avengers endgame'
@@ -92,7 +92,7 @@ def get_drink_from_response(response: str) -> str:
 	drink = re.sub(r"[^a-z0-9\s]", '', cleaned) #remove all punctuation except ' and spaces
 	drink = drink.strip()
 
-	if not drink or any(value in drink for value in {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable'}):
+	if not drink or any(value in drink for value in {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable', 'idk'}):
 		return 'none'
 	if any(value in drink.lower() for value in {'coke', 'cola', 'coca cola', 'coka-cola'}):
 		return 'coca cola'
