@@ -6,6 +6,7 @@ import random
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, RepeatedStratifiedKFold
 import scipy.stats as st
 
 from data_clean import make_cleaned_flattened_dataframe
@@ -171,13 +172,13 @@ def do_random_forest():
 
 
 
-n_estimators = [int(x) for x in np.linspace(start = 400, stop = 600, num = 10)]
-max_features = ['log2', 'sqrt']
-max_depth = [int(x) for x in np.linspace(30, 50, num = 10)]
-min_samples_split = [6, 7, 8, 9, 10]
+n_estimators = [int(x) for x in np.linspace(start = 100, stop = 500, num = 4)]
+max_features = [1, 2, 3, 4, 5]
+max_depth = [int(x) for x in np.linspace(10, 50, num = 4)]
+min_samples_split = [6, 8, 10]
 min_samples_leaf = [1, 2, 3]
 bootstrap = [True, False]
-random_grid = {'n_estimators': n_estimators,
+param_grid = {'n_estimators': n_estimators,
                'max_features': max_features,
                'max_depth': max_depth,
                'min_samples_split': min_samples_split,
@@ -185,11 +186,16 @@ random_grid = {'n_estimators': n_estimators,
                'bootstrap': bootstrap}
 
 model = RandomForestClassifier()
-# model_random = RandomizedSearchCV(estimator = model, param_distributions=random_grid, cv=25, random_state=1, n_jobs=-1)
+# model_random = GridSearchCV(estimator = model, param_distributions=random_grid, cv=5, random_state=1, verbose=1, n_jobs=-1)
+
+cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=5)
+clf = GridSearchCV(estimator=model, param_grid=param_grid, cv=cv, verbose=4)
+
+clf.fit(X_train, t_train)
 
 # model_random.fit(X_train, t_train)
 
-# print(model_random.best_params_)
+print(clf.best_params_)
 
 
 def evaluate(model, test_features, test_labels):
@@ -200,30 +206,32 @@ def evaluate(model, test_features, test_labels):
     return score
 
 base_acc = 0
-for i in range(100):
+for i in range(50):
     base_model = RandomForestClassifier(n_estimators=50, random_state=i)
     base_model.fit(X_train, t_train)
     base_acc += evaluate(base_model, X_valid, t_valid)
-base_acc = base_acc / 100
+base_acc = base_acc / 50
 print('Model Performance')
 print('Accuracy = {:0.2f}%.'.format(base_acc*100))
 
 random_acc = 0
-for i in range(100):
-    #best_random = RandomForestClassifier(**model_random.best_params_, random_state=i)
-    best_random = RandomForestClassifier(**{'n_estimators': 500, 'min_samples_split': 8, 'min_samples_leaf': 1, 'max_features': 'log2', 'max_depth': 40, 'bootstrap': True}, random_state = i)
+for i in range(50):
+    best_random = RandomForestClassifier(**clf.best_params_, random_state=i)
+    #best_random = RandomForestClassifier(**{'n_estimators': 500, 'min_samples_split': 8, 'min_samples_leaf': 1, 'max_features': 'log2', 'max_depth': 40, 'bootstrap': True}, random_state = i)
     best_random.fit(X_train, t_train)
     random_acc += evaluate(best_random, X_valid, t_valid)
-random_acc = random_acc / 100
+random_acc = random_acc / 50
 print('Model Performance')
 print('Accuracy = {:0.2f}%.'.format(random_acc*100))
 
 print('Improvement of {:0.2f}%.'.format(100 * (random_acc - base_acc) / base_acc))
 
-for i in range(100):
-    best_random = RandomForestClassifier(**{'n_estimators': 500, 'min_samples_split': 8, 'min_samples_leaf': 1, 'max_features': 'log2', 'max_depth': 40, 'bootstrap': True}, random_state=i)
+random_acc = 0
+for i in range(50):
+    best_random = RandomForestClassifier(**clf.best_params_, random_state=i)
+    #best_random = RandomForestClassifier(**{'n_estimators': 500, 'min_samples_split': 8, 'min_samples_leaf': 1, 'max_features': 'log2', 'max_depth': 40, 'bootstrap': True}, random_state=i)
     best_random.fit(X_train, t_train)
     random_acc += evaluate(best_random, X_test, t_test)
-random_acc = random_acc / 100
+random_acc = random_acc / 50
 print('Model Test Performance')
 print('Accuracy = {:0.2f}%.'.format(random_acc*100))
