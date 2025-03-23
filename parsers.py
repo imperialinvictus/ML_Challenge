@@ -2,11 +2,10 @@
 Functions for parsing survey responses
 """
 import regex as re
-from word2num import Word2Num
 from thefuzz import fuzz as fuzzymatch
 from collections import defaultdict
 
-from config import W2N_FUZZY_THRESHOLD
+WORD2NUM = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20}
 
 
 def clean_response(response: str) -> str:
@@ -14,12 +13,12 @@ def clean_response(response: str) -> str:
 
 
 def get_num_from_element(element: str) -> float | None:
-    w2n = Word2Num(fuzzy_threshold=W2N_FUZZY_THRESHOLD)
     try:
         return float(element)
     except ValueError:
-        if len(re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ]+", element.lower())) > 0:
-            return w2n.parse(element)
+        fuzz_element = re.sub(r'[^a-z]', '', element)
+        if fuzz_element in WORD2NUM:
+            return WORD2NUM[fuzz_element]
     return None
 
 
