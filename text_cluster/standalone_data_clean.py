@@ -2,14 +2,14 @@ import json
 
 import pandas as pd
 
-from config import (
+from text_cluster.config import (
     DEFAULT_DRINK_KEYWORDS,
     DEFAULT_MOVIE_KEYWORDS,
     SPICE_MAP,
     SETTING_COMBINATION_MAP,
     PERSON_COMBINATION_MAP
 )
-from parsers import (
+from text_cluster.parsers import (
     get_number_from_response,
     get_movie_vector_from_response,
     get_drink_vector_from_response,
@@ -138,12 +138,12 @@ def load_dict_from_json(filename):
         return {k: set(v) if isinstance(v, list) else v for k, v in loaded.items()}
 
 
-def get_dataframe_from_file(filename, fuzzy_cutoff=90):
-    movie_fuzzy_clusters = load_dict_from_json('movie_clusters.json')
-    drink_fuzzy_clusters = load_dict_from_json('drink_clusters.json')
-    setting_combinations = load_dict_from_json('setting_combinations.json')
-    person_combinations = load_dict_from_json('person_combinations.json')
+def get_dataframe_from_file(filename, folder_path, fuzzy_cutoff=90, has_labels=False):
+    movie_fuzzy_clusters = load_dict_from_json(f'{folder_path}/movie_clusters.json')
+    drink_fuzzy_clusters = load_dict_from_json(f'{folder_path}/drink_clusters.json')
+    setting_combinations = load_dict_from_json(f'{folder_path}/setting_combinations.json')
+    person_combinations = load_dict_from_json(f'{folder_path}/person_combinations.json')
 
     df_file = make_cleaned_flattened_dataframe_from_input_file(filename, movie_fuzzy_clusters, drink_fuzzy_clusters,
-                                                         setting_combinations, person_combinations, fuzzy_cuttoff=fuzzy_cutoff)
+                                                         setting_combinations, person_combinations, fuzzy_cuttoff=fuzzy_cutoff, has_labels=has_labels)
     return df_file

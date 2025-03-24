@@ -21,7 +21,7 @@ import random
 import numpy as np
 import pandas as pd
 
-from standalone_data_clean import get_dataframe_from_file
+from text_cluster.standalone_data_clean import get_dataframe_from_file
 
 
 class DataCleaner:
@@ -52,25 +52,17 @@ class DataCleaner:
         """
         Parses from raw csv file to categories using string clustering and flattens to one-hot encodings 
         """
-        return get_dataframe_from_file(filename, fuzzy_cutoff=85)
+        return get_dataframe_from_file(filename, 'text_cluster', fuzzy_cutoff=85)
 
 class NN:
     """
     Class for forward pass through the neural network
     """
-    def __init__(self, weights, biases):
-        self.weights = weights
-        self.biases = biases
-
-    def make_NN(filename):
-        """
-        Load the model parameters from the file and return a neural network object
-        """
-        params = np.load('nn/model_params.npz')
-        num_layers = len([key for key in params.keys() if key.startswith('weights_')])
-        weights = [params[f'weights_{i}'] for i in range(num_layers)]
-        biases = [params[f'biases_{i}'] for i in range(num_layers)]
-        return NN(weights, biases)
+    def __init__(self, filename):
+        params = np.load(filename)
+        self.num_layers = len([key for key in params.keys() if key.startswith('weights_')])
+        self.weights = [params[f'weights_{i}'] for i in range(self.num_layers)]
+        self.biases = [params[f'biases_{i}'] for i in range(self.num_layers)]
 
     def softmax(self, x):
         """
@@ -79,7 +71,7 @@ class NN:
         m = np.max(x, axis=1, keepdims=True)
         s = np.sum(np.exp(x - m), axis=1, keepdims=True)
         return np.exp(x - m) / s
-    
+
     def ReLU(self, x):
         """
         Compute ReLU activation function
@@ -90,34 +82,99 @@ class NN:
         """
         Perform a forward pass through the network
         """
-        for i in range(len(self.weights)):
+        for i in range(self.num_layers):
             X = np.dot(X, self.weights[i]) + self.biases[i]
-            if i < len(self.weights) - 1:
+            if i < self.num_layers - 1:
                 X = self.ReLU(X)
             else:
                 X = X.astype(np.float64)
                 X = self.softmax(X)
-        
+
         return np.argmax(X, axis=1) # return the class with the highest probability
+
+class BaggedNN(NN):
+    """
+    Class for bagged neural network
+    """
+    classes = [0, 1, 2]
+
+    def __init__(self, filename):
+        params = np.load(filename)
+        self.num_estimators = params['num_estimators']
+        self.num_layers = params['num_layers']
+        self.estimators_params = []
+        for i in range(self.num_estimators):
+            estimator_params = {}
+            estimator_params['weights'] = [params[f'estimator_{i}_weights_{j}'] for j in range(self.num_layers)]
+            estimator_params['intercepts'] = [params[f'estimator_{i}_intercepts_{j}'] for j in range(self.num_layers)]
+            self.estimators_params.append(estimator_params)
+
+    def predict(self, X):
+        all_predictions = np.zeros((X.shape[0], self.num_estimators), dtype=int)
+        for i, params in enumerate(self.estimators_params):
+            h = X  # Start with original input for each estimator
+            for j in range(self.num_layers):
+                h = np.dot(h, params['weights'][j]) + params['intercepts'][j]
+                if j < self.num_layers - 1:
+                    h = super().ReLU(h)
+                else:
+                    h = h.astype(np.float64)
+                    probs = super().softmax(h)
+            predictions = np.argmax(probs, axis=1)
+            all_predictions[:, i] = predictions
+
+        # Majority voting
+        final_predictions = np.apply_along_axis(
+            lambda x: np.bincount(x, minlength=len(self.classes)).argmax(),
+            axis=1,
+            arr=all_predictions
+        )
+        return final_predictions
+
+
+def predict_all_cluster(filename):
+    """
+    Make predictions for the data in filename using text-clustered encoding
+    """
+    nn = NN('nn/model_params.npz')
+    # baggedNN = BaggedNN('nn/bagged_model_params.npz')
+
+    encoded_inputs = DataCleaner.filename_to_dataframe(filename)
+    predictions = nn.predict(encoded_inputs)
+    # baggedPredictions = baggedNN.predict(encoded_inputs)
+
+    expected = pd.read_csv('nn/y_valid.csv')  # TODO: delete when submitting
+    baseCorrect = sum(predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
+    baseAccuracy = baseCorrect / len(predictions)
+    # baggedCorrect = sum(baggedPredictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
+    # baggedAccuracy = baggedCorrect / len(predictions)
+
+    print(f"Base Accuracy: {baseAccuracy:.2f}")
+    # print(f"Bagged Accuracy: {baggedAccuracy:.2f}")
+
 
 def predict_all(filename):
     """
     Make predictions for the data in filename
     """
-    nn = NN.make_NN('nn/model_params.npz')
+    nn = NN('nn/model_params.npz')
+    baggedNN = BaggedNN('nn/bagged_model_params.npz')
 
     inputs = pd.read_csv(filename)
-    encoded_inputs = DataCleaner.filename_to_dataframe(filename)
-    predictions = nn.predict(encoded_inputs)
-    remap = {0: "Pizza", 1:"Shawarma", 2: "Sushi"}
-    expected = pd.read_csv('example_test_y.csv') # TODO: delete when submitting
-    print(predictions, expected)
-    correct = sum(remap[predictions[i]] == expected.iloc[i, 0] for i in range(len(predictions)))
-    accuracy = correct / len(predictions)
-    print(f"Accuracy: {accuracy:.3f}")
+    predictions = nn.predict(inputs)
+    baggedPredictions = baggedNN.predict(inputs)
+
+    expected = pd.read_csv('nn/y_valid.csv') # TODO: delete when submitting
+    baseCorrect = sum(predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
+    baseAccuracy = baseCorrect / len(predictions)
+    baggedCorrect = sum(baggedPredictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
+    baggedAccuracy = baggedCorrect / len(predictions)
+
+    print(f"Base Accuracy: {baseAccuracy:.2f}")
+    print(f"Bagged Accuracy: {baggedAccuracy:.2f}")
     
     return predictions
     
 
 if __name__ == '__main__':
-    predict_all('example_test.csv')
+    predict_all_cluster('nn/X_valid.csv')
