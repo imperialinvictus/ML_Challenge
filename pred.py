@@ -143,8 +143,9 @@ def predict_all_cluster(filename):
     predictions = nn.predict(encoded_inputs)
     # baggedPredictions = baggedNN.predict(encoded_inputs)
 
-    expected = pd.read_csv('nn/y_valid.csv')  # TODO: delete when submitting
-    baseCorrect = sum(predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
+    expected = pd.read_csv('text_cluster/example_test_y.csv')  # TODO: delete when submitting
+    remap = {0: "Pizza", 1: "Shawarma", 2: "Sushi"}
+    baseCorrect = sum(remap[predictions[i]] == expected.iloc[i, 0] for i in range(len(predictions)))
     baseAccuracy = baseCorrect / len(predictions)
     # baggedCorrect = sum(baggedPredictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
     # baggedAccuracy = baggedCorrect / len(predictions)
@@ -177,4 +178,4 @@ def predict_all(filename):
     
 
 if __name__ == '__main__':
-    predict_all_cluster('nn/X_valid.csv')
+    predict_all_cluster('text_cluster/example_test.csv')
