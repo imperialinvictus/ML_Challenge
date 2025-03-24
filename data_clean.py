@@ -1,6 +1,7 @@
 import json
 
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 from config import (
     DEFAULT_DRINK_KEYWORDS,
@@ -382,13 +383,15 @@ def load_dict_from_json(filename):
 def save_clusters_to_file(filename):
     data_csv_clean = pd.read_csv(filename, keep_default_na=False)
     data_csv_clean.columns = ['id', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Label']
+    data_train_valid, data_test = train_test_split(data_csv_clean, test_size=0.15, random_state=3)
+    data_train, data_valid = train_test_split(data_train_valid, test_size=0.15, random_state=3)
 
-    movie_fuzzy_clusters = create_fuzzy_clusters(data_csv_clean['Q5'].tolist(), add_keywords=DEFAULT_MOVIE_KEYWORDS,
+    movie_fuzzy_clusters = create_fuzzy_clusters(data_train['Q5'].tolist(), add_keywords=DEFAULT_MOVIE_KEYWORDS,
                                                  cutoff=85, minimum_size=5)
-    drink_fuzzy_clusters = create_fuzzy_clusters(data_csv_clean['Q6'].tolist(), add_keywords=DEFAULT_DRINK_KEYWORDS,
+    drink_fuzzy_clusters = create_fuzzy_clusters(data_train['Q6'].tolist(), add_keywords=DEFAULT_DRINK_KEYWORDS,
                                                  cutoff=85, minimum_size=5)
-    setting_combinations = create_combination_categories(data_csv_clean['Q3'].tolist(), SETTING_COMBINATION_MAP)
-    person_combinations = create_combination_categories(data_csv_clean['Q7'].tolist(), PERSON_COMBINATION_MAP)
+    setting_combinations = create_combination_categories(data_train['Q3'].tolist(), SETTING_COMBINATION_MAP)
+    person_combinations = create_combination_categories(data_train['Q7'].tolist(), PERSON_COMBINATION_MAP)
 
     save_dict_to_json(movie_fuzzy_clusters, 'movie_clusters.json')
     save_dict_to_json(drink_fuzzy_clusters, 'drink_clusters.json')
@@ -405,3 +408,5 @@ def get_dataframe_from_file(filename):
     df_file = make_cleaned_flattened_dataframe_from_file(filename, movie_fuzzy_clusters, drink_fuzzy_clusters,
                                                          setting_combinations, person_combinations)
     return df_file
+
+save_clusters_to_file('cleaned_data_combined.csv')

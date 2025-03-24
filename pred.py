@@ -21,6 +21,8 @@ import random
 import numpy as np
 import pandas as pd
 
+from standalone_data_clean import get_dataframe_from_file
+
 
 class DataCleaner:
     """
@@ -45,6 +47,12 @@ class DataCleaner:
         One-hot encode categorical features
         """
         return X
+    
+    def filename_to_dataframe(filename: str) -> pd.DataFrame:
+        """
+        Parses from raw csv file to categories using string clustering and flattens to one-hot encodings 
+        """
+        return get_dataframe_from_file(filename, fuzzy_cutoff=85)
 
 class NN:
     """
@@ -99,15 +107,17 @@ def predict_all(filename):
     nn = NN.make_NN('nn/model_params.npz')
 
     inputs = pd.read_csv(filename)
-    predictions = nn.predict(inputs)
-    
-    expected = pd.read_csv('nn/y_valid.csv') # TODO: delete when submitting
-    correct = sum(predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
+    encoded_inputs = DataCleaner.filename_to_dataframe(filename)
+    predictions = nn.predict(encoded_inputs)
+    remap = {0: "Pizza", 1:"Shawarma", 2: "Sushi"}
+    expected = pd.read_csv('example_test_y.csv') # TODO: delete when submitting
+    print(predictions, expected)
+    correct = sum(remap[predictions[i]] == expected.iloc[i, 0] for i in range(len(predictions)))
     accuracy = correct / len(predictions)
-    print(f"Accuracy: {accuracy:.2f}")
+    print(f"Accuracy: {accuracy:.3f}")
     
     return predictions
     
 
 if __name__ == '__main__':
-    predict_all('nn/X_valid.csv')
+    predict_all('example_test.csv')
