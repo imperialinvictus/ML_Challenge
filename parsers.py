@@ -2,11 +2,40 @@
 Functions for parsing survey responses
 """
 import regex as re
-from word2num import Word2Num
-from thefuzz import fuzz as fuzzymatch
+# from thefuzz import fuzz as fuzzymatch
 from collections import defaultdict
 
-from config import W2N_FUZZY_THRESHOLD
+WORD2NUM = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20}
+
+
+def levenshtein(str1, str2):
+    """
+    Computes the Levenshtein distance between two strings.
+
+    Source: GeeksForGeeks
+    URL: https://www.geeksforgeeks.org/introduction-to-levenshtein-distance/
+    """
+    m, n = len(str1), len(str2)
+    dp = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
+
+    for i in range(m + 1):
+        dp[i][0] = i
+    for j in range(n + 1):
+        dp[0][j] = j
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if str1[i - 1] == str2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1]
+            else:
+                dp[i][j] = 1 + min(dp[i][j - 1], dp[i - 1][j], dp[i - 1][j - 1])
+
+    return dp[m][n]
+
+
+def fuzzymatch(s1, s2):
+    max_len = max(len(s1), len(s2), 1)
+    return (1 - (levenshtein(s1, s2) / max_len))*100
 
 
 def clean_response(response: str) -> str:
@@ -14,12 +43,12 @@ def clean_response(response: str) -> str:
 
 
 def get_num_from_element(element: str) -> float | None:
-    w2n = Word2Num(fuzzy_threshold=W2N_FUZZY_THRESHOLD)
     try:
         return float(element)
     except ValueError:
-        if len(re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ]+", element.lower())) > 0:
-            return w2n.parse(element)
+        fuzz_element = re.sub(r'[^a-z]', '', element)
+        if fuzz_element in WORD2NUM:
+            return WORD2NUM[fuzz_element]
     return None
 
 
@@ -83,7 +112,7 @@ def get_movie_vector_from_response(response: str, cutoff=90, clusters=None) -> l
     for key, values in keywords.items():
         bools[key] = 0
         for kw in values:
-            if fuzzymatch.ratio(kw, movie) > cutoff:
+            if fuzzymatch(kw, movie) > cutoff:
                 bools[key] = 1
                 break  # Stop checking
 
