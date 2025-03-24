@@ -137,21 +137,21 @@ def predict_all_cluster(filename):
     Make predictions for the data in filename using text-clustered encoding
     """
     nn = NN('nn/model_params.npz')
-    # baggedNN = BaggedNN('nn/bagged_model_params.npz')
+    baggedNN = BaggedNN('nn/bagged_model_params.npz')
 
     encoded_inputs = DataCleaner.filename_to_dataframe(filename)
     predictions = nn.predict(encoded_inputs)
-    # baggedPredictions = baggedNN.predict(encoded_inputs)
+    baggedPredictions = baggedNN.predict(encoded_inputs)
 
     expected = pd.read_csv('text_cluster/example_test_y.csv')  # TODO: delete when submitting
     remap = {0: "Pizza", 1: "Shawarma", 2: "Sushi"}
     baseCorrect = sum(remap[predictions[i]] == expected.iloc[i, 0] for i in range(len(predictions)))
     baseAccuracy = baseCorrect / len(predictions)
-    # baggedCorrect = sum(baggedPredictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
-    # baggedAccuracy = baggedCorrect / len(predictions)
+    baggedCorrect = sum(remap[baggedPredictions[i]] == expected.iloc[i, 0] for i in range(len(predictions)))
+    baggedAccuracy = baggedCorrect / len(predictions)
 
     print(f"Base Accuracy: {baseAccuracy:.2f}")
-    # print(f"Bagged Accuracy: {baggedAccuracy:.2f}")
+    print(f"Bagged Accuracy: {baggedAccuracy:.2f}")
 
 
 def predict_all(filename):
