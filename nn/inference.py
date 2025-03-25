@@ -11,7 +11,7 @@ class NN:
         self.weights = [params[f'weights_{i}'] for i in range(self.num_layers)]
         self.biases = [params[f'biases_{i}'] for i in range(self.num_layers)]
 
-    def softmax(self, x):
+    def softmax(self, x) -> np.ndarray:
         """
         Compute softmax values for each sets of scores in X.
         """
@@ -19,7 +19,7 @@ class NN:
         s = np.sum(np.exp(x - m), axis=1, keepdims=True)
         return np.exp(x - m) / s
     
-    def ReLU(self, x):
+    def ReLU(self, x) -> np.ndarray:
         """
         Compute ReLU activation function
         """

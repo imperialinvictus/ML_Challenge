@@ -30,14 +30,14 @@ def predict_all(filename):
     """
     Make predictions for the data in filename
     """
-    nn = NN('nn/model_params.npz')
-    baggedNN = BaggedNN('nn/bagged_model_params.npz')
+    nn = NN('nn/mlp_model.npz')
+    baggedNN = BaggedNN('nn/bagged_model.npz')
 
     inputs = pd.read_csv(filename)
     predictions = nn.predict(inputs)
     baggedPredictions = baggedNN.predict(inputs)
     
-    expected = pd.read_csv('nn/y_valid.csv') # TODO: delete when submitting
+    expected = pd.read_csv('nn/dataset/y_valid.csv') # TODO: delete when submitting
     baseCorrect = sum(predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
     baseAccuracy = baseCorrect / len(predictions)
     baggedCorrect = sum(baggedPredictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
@@ -50,4 +50,4 @@ def predict_all(filename):
     
 
 if __name__ == '__main__':
-    predict_all('nn/X_valid.csv')
+    predict_all('nn/dataset/X_valid.csv')
