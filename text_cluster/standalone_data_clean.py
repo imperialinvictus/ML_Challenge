@@ -90,25 +90,6 @@ def make_cleaned_flattened_dataframe_from_input_file(input_csv_filename: str, mo
             if col_name not in feature_names:
                 feature_names.append(col_name)
 
-        # Process Q7: person
-        q7_vector = get_combination_vector(row['Q7'], person_combinations, PERSON_COMBINATION_MAP)
-        for i, val in enumerate(q7_vector[:len(person_combinations)]):
-            col_name = f'Q7_person_combo_{i}'
-            processed_row[col_name] = val
-            if col_name not in feature_names:
-                feature_names.append(col_name)
-
-        for i, val in enumerate(
-                q7_vector[len(person_combinations):len(person_combinations) + len(PERSON_COMBINATION_MAP)]):
-            col_name = f'Q7_person_{list(PERSON_COMBINATION_MAP)[i]}'
-            processed_row[col_name] = val
-            if col_name not in feature_names:
-                feature_names.append(col_name)
-
-        processed_row['Q7_person_count'] = q7_vector[-1]
-        if 'Q7_person_count' not in feature_names:
-            feature_names.append('Q7_person_count')
-
         # Process Q8: spiciness level
         q8_vector = [int(j == SPICE_MAP[row['Q8']]) for j in range(5)]
         for i, val in enumerate(q8_vector):

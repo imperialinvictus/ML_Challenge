@@ -147,14 +147,14 @@ def predict_all(filename):
     mapped_predictions = [remap[p] for p in predictions]
     mapped_bagged_predictions = [remap[p] for p in bagged_predictions]
 
-    expected = pd.read_csv('text_cluster/example_test_y.csv')  # TODO: delete when submitting
-    baseCorrect = sum(mapped_predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
-    baseAccuracy = baseCorrect / len(predictions)
-    baggedCorrect = sum(mapped_bagged_predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
-    baggedAccuracy = baggedCorrect / len(predictions)
+    # expected = pd.read_csv('text_cluster/example_test_y.csv')  # TODO: delete when submitting
+    # baseCorrect = sum(mapped_predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
+    # baseAccuracy = baseCorrect / len(predictions)
+    # baggedCorrect = sum(mapped_bagged_predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
+    # baggedAccuracy = baggedCorrect / len(predictions)
 
-    print(f"Base Accuracy: {baseAccuracy:.2f}")
-    print(f"Bagged Accuracy: {baggedAccuracy:.2f}")
+    # print(f"Base Accuracy: {baseAccuracy:.2f}")
+    # print(f"Bagged Accuracy: {baggedAccuracy:.2f}")
 
     return mapped_bagged_predictions
 

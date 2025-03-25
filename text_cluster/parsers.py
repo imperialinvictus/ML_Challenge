@@ -39,7 +39,7 @@ def fuzzymatch(s1, s2):
 
 
 def clean_response(response: str) -> str:
-    return ''.join([i if ord(i) < 128 else '-' for i in response.lower().strip()])  # remove non-ascii
+    return ''.join([i if ord(i) < 128 else '-' for i in str(response).lower().strip()])  # remove non-ascii
 
 
 def get_num_from_element(element: str) -> float | None:
