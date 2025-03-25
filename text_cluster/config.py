@@ -7,7 +7,7 @@ W2N_FUZZY_THRESHOLD = 100
 
 DEFAULT_DRINK_KEYWORDS = defaultdict(set)
 DEFAULT_DRINK_KEYWORDS.update({
-    'none': {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable', 'idk', 'nothing'},
+    'none': {'none', 'n/a', 'no', 'na', 'nan', '-', 'not applicable', 'idk', 'nothing', 'no drink'},
     'coke': {'coke', 'cola', 'coca cola', 'cocacola', 'coka-cola'},
     'pepsi': {'pepsi'},
     'pop': {'pop', 'soda', 'sodapop', 'popsoda', 'pops', 'soft drink', 'pop drink'},

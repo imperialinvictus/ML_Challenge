@@ -12,12 +12,6 @@ Here's an example of how your script may be used in our test file:
     predict_all("example_test_set.csv")
 """
 
-# basic python imports are permitted
-import sys
-import csv
-import random
-
-# numpy and pandas are also permitted
 import numpy as np
 import pandas as pd
 
