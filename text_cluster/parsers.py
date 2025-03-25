@@ -1,7 +1,7 @@
 """
 Functions for parsing survey responses
 """
-import regex as re
+import re
 # from thefuzz import fuzz as fuzzymatch
 from collections import defaultdict
 

@@ -1,7 +1,7 @@
 """
 Functions for clustering and categorizing response data.
 """
-import regex as re
+import re
 from collections import defaultdict
 from fuzzup import fuzz
 

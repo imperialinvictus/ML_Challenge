@@ -132,7 +132,7 @@ class BaggedNN(NN):
         return final_predictions
 
 
-def predict_all_cluster(filename):
+def predict_all(filename):
     """
     Make predictions for the data in filename using text-clustered encoding
     """
@@ -141,20 +141,25 @@ def predict_all_cluster(filename):
 
     encoded_inputs = DataCleaner.filename_to_dataframe(filename)
     predictions = nn.predict(encoded_inputs)
-    baggedPredictions = baggedNN.predict(encoded_inputs)
+    bagged_predictions = baggedNN.predict(encoded_inputs)
+
+    remap = {0: "Pizza", 1: "Shawarma", 2: "Sushi"}
+    mapped_predictions = [remap[p] for p in predictions]
+    mapped_bagged_predictions = [remap[p] for p in bagged_predictions]
 
     expected = pd.read_csv('text_cluster/example_test_y.csv')  # TODO: delete when submitting
-    remap = {0: "Pizza", 1: "Shawarma", 2: "Sushi"}
-    baseCorrect = sum(remap[predictions[i]] == expected.iloc[i, 0] for i in range(len(predictions)))
+    baseCorrect = sum(mapped_predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
     baseAccuracy = baseCorrect / len(predictions)
-    baggedCorrect = sum(remap[baggedPredictions[i]] == expected.iloc[i, 0] for i in range(len(predictions)))
+    baggedCorrect = sum(mapped_bagged_predictions[i] == expected.iloc[i, 0] for i in range(len(predictions)))
     baggedAccuracy = baggedCorrect / len(predictions)
 
     print(f"Base Accuracy: {baseAccuracy:.2f}")
     print(f"Bagged Accuracy: {baggedAccuracy:.2f}")
 
+    return mapped_bagged_predictions
 
-def predict_all(filename):
+
+def predict_all_old(filename):
     """
     Make predictions for the data in filename
     """
@@ -173,9 +178,9 @@ def predict_all(filename):
 
     print(f"Base Accuracy: {baseAccuracy:.2f}")
     print(f"Bagged Accuracy: {baggedAccuracy:.2f}")
-    
+
     return predictions
     
 
 if __name__ == '__main__':
-    predict_all_cluster('text_cluster/example_test.csv')
+    print(predict_all('text_cluster/example_test.csv'))
