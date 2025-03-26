@@ -3,20 +3,20 @@ import json
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from text_cluster.config import (
+from config import (
     DEFAULT_DRINK_KEYWORDS,
     DEFAULT_MOVIE_KEYWORDS,
     SPICE_MAP,
     SETTING_COMBINATION_MAP,
     PERSON_COMBINATION_MAP
 )
-from text_cluster.parsers import (
+from parsers import (
     get_number_from_response,
     get_movie_vector_from_response,
     get_drink_vector_from_response,
     get_combination_vector
 )
-from text_cluster.clustering import create_fuzzy_clusters, create_combination_categories
+from clustering import create_fuzzy_clusters, create_combination_categories
 
 
 def get_response_numbers():
@@ -273,7 +273,7 @@ def make_cleaned_flattened_dataframe_from_file(input_csv_filename: str, movie_fu
 
     # Process each row
     for idx, row in data_csv_clean.iterrows():
-        processed_row = {'id': row['id']}
+        processed_row = {}
 
         # Process Q1: complexity rating (1-5)
         q1_vector = [int(j == row['Q1'] - 1) for j in range(5)]
@@ -379,7 +379,7 @@ def make_cleaned_flattened_dataframe_from_csv(input_csv: str, movie_fuzzy_cluste
 
     # Process each row
     for idx, row in data_csv_clean.iterrows():
-        processed_row = {'id': row['id']}
+        processed_row = {}
 
         # Process Q1: complexity rating (1-5)
         q1_vector = [int(j == row['Q1'] - 1) for j in range(5)]
@@ -420,6 +420,7 @@ def make_cleaned_flattened_dataframe_from_csv(input_csv: str, movie_fuzzy_cluste
 
         # Process Q5: movie
         q5_vector = get_movie_vector_from_response(row['Q5'], clusters=movie_fuzzy_clusters, cutoff=fuzzy_cutoff)
+
         for i, val in enumerate(q5_vector):
             if i < len(movie_fuzzy_clusters):
                 col_name = f'Q5_movie_{list(movie_fuzzy_clusters.keys())[i]}'
@@ -486,18 +487,19 @@ def load_dict_from_json(filename):
         return {k: set(v) if isinstance(v, list) else v for k, v in loaded.items()}
 
 
-def save_clusters_to_file(filename, folder_path=None, random_state=42, cutoff=85, minimum_size=5, test_size=0.15):
+def save_clusters_to_file(filename, folder_path=None, random_state=42, cutoff=85, minimum_size=5, test_size=0.15, clustering_sample_size=0.3):
     data_csv_clean = pd.read_csv(filename, keep_default_na=False)
     data_csv_clean.columns = ['id', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Label']
+    data_clustering, _ = train_test_split(data_csv_clean, test_size=clustering_sample_size, random_state=random_state)
     data_train_valid, data_test = train_test_split(data_csv_clean, test_size=test_size, random_state=random_state)
     data_train, data_valid = train_test_split(data_train_valid, test_size=test_size, random_state=random_state)
 
-    movie_fuzzy_clusters = create_fuzzy_clusters(data_train['Q5'].tolist(), add_keywords=DEFAULT_MOVIE_KEYWORDS,
+    movie_fuzzy_clusters = create_fuzzy_clusters(data_clustering['Q5'].tolist(), add_keywords=DEFAULT_MOVIE_KEYWORDS,
                                                  cutoff=cutoff, minimum_size=minimum_size)
-    drink_fuzzy_clusters = create_fuzzy_clusters(data_train['Q6'].tolist(), add_keywords=DEFAULT_DRINK_KEYWORDS,
+    drink_fuzzy_clusters = create_fuzzy_clusters(data_clustering['Q6'].tolist(), add_keywords=DEFAULT_DRINK_KEYWORDS,
                                                  cutoff=cutoff, minimum_size=minimum_size)
-    setting_combinations = create_combination_categories(data_train['Q3'].tolist(), SETTING_COMBINATION_MAP)
-    person_combinations = create_combination_categories(data_train['Q7'].tolist(), PERSON_COMBINATION_MAP)
+    setting_combinations = create_combination_categories(data_clustering['Q3'].tolist(), SETTING_COMBINATION_MAP)
+    person_combinations = create_combination_categories(data_clustering['Q7'].tolist(), PERSON_COMBINATION_MAP)
     if folder_path is not None:
         save_dict_to_json(movie_fuzzy_clusters, f'{folder_path}/movie_clusters.json')
         save_dict_to_json(drink_fuzzy_clusters, f'{folder_path}/drink_clusters.json')
@@ -544,4 +546,4 @@ def get_dataframe_from_csv(pd_csv, folder_path=None, fuzzy_cutoff=90):
                                                          setting_combinations, person_combinations, fuzzy_cutoff=fuzzy_cutoff)
     return df_file
 
-save_clusters_to_file('cleaned_data_combined.csv')
+save_clusters_to_file('cleaned_data_combined.csv', 'text_cluster', cutoff=85, clustering_sample_size=0.15)
