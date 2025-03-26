@@ -29,13 +29,10 @@ t_train, t_valid = np.array(df_train["Label"]), np.array(df_valid["Label"])
 X_train, X_valid = df_train.drop("Label", axis=1), df_valid.drop("Label", axis=1)
 
 best_model.fit(X_train, t_train)
-# print(best_model.score(X_valid, t_valid))
-encoded_input = get_dataframe_from_file_standalone('text_cluster/example_test.csv', folder_path='text_cluster', has_labels=False)
-remap = {"Pizza": 0, "Shawarma": 1, "Sushi": 2}
-# print([remap[i] for i in best_model.predict(encoded_input)])
+print(best_model.score(X_valid, t_valid))
+
 feature_importance = sorted(list(zip([float(i) for i in best_model.feature_importances_], best_model.feature_names_in_)), reverse=True)
 for feature in feature_importance:
-    continue
     print(f"{feature[1]}: {feature[0]:3f}")
 
 def tree_to_code(tree, feature_names, output_py="randomforest_dump.py", output_func='tree', mode='a'):
@@ -65,5 +62,4 @@ def tree_to_code(tree, feature_names, output_py="randomforest_dump.py", output_f
         recurse(0, 1)
 
 for i in range(len(best_model.estimators_)):
-    continue
-    tree_to_code(best_model.estimators_[0], best_model.feature_names_in_, output_func=f"tree{i}", mode='a')
+    tree_to_code(best_model.estimators_[i], best_model.feature_names_in_, output_func=f"tree{i}", mode='a')

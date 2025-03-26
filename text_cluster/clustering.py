@@ -8,7 +8,7 @@ from fuzzup import fuzz
 
 def create_fuzzy_clusters(response_list: list[str], add_keywords=None, cutoff=80, minimum_size=5) -> dict[str, set]:
     cleaned_response_list = [re.sub(r"[^a-z0-9\s]", '', item.strip().lower()).strip() for item in response_list]
-    print(response_list)
+    
     fuzzy_clusters = fuzz.fuzzy_cluster(cleaned_response_list, cutoff=cutoff)
     cluster_dict = defaultdict(set)
     count_dict = defaultdict(int)

@@ -19,7 +19,7 @@ def predict_all(filename: str) -> list:
         globals()[f'tree{i}'] 
         for i in range(0, 250)
     ]
-    
+    print(tree_functions)
     predictions = []
     
     for _, row in encoded_input.iterrows():
@@ -35,10 +35,3 @@ def predict_all(filename: str) -> list:
         predictions.append(int(prediction))
     
     return predictions
-
-remap = {0: "Pizza", 1: "Shawarma", 2: "Sushi"}
-predictions = predict_all('text_cluster/example_test.csv')
-expected = pd.read_csv("text_cluster/example_test_y.csv")
-print(predict_all('text_cluster/example_test.csv'))
-correct = [remap[predictions[i]] == expected.iloc[i, 0] for i in range(len(predictions))]
-print(correct, sum(correct)/len(correct))
