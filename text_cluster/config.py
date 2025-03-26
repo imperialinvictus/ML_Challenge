@@ -20,7 +20,7 @@ DEFAULT_DRINK_KEYWORDS.update({
     'milk': {'milk'},
     'juice': {'juice'},
     'canada': {'canada dry'},
-    'ginger ale': {'ginger ale', 'gingerale'},
+    'ginger_ale': {'ginger ale', 'gingerale'},
     'beer': {'beer', 'rootbeer'},
     'wine': {'wine'}
 })

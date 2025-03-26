@@ -8,7 +8,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 import scipy.stats as st
 
-from data_clean import make_cleaned_flattened_dataframe
+from text_cluster.data_clean import make_cleaned_flattened_dataframe
 
 df = make_cleaned_flattened_dataframe('cleaned_data_combined.csv')
 

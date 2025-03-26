@@ -1,5 +1,6 @@
 import json
 
+import re
 import pandas as pd
 
 from text_cluster.config import (
@@ -54,7 +55,7 @@ def make_cleaned_flattened_dataframe_from_input_file(input_csv_filename: str, mo
 
         for i, val in enumerate(
                 q3_vector[len(setting_combinations):len(setting_combinations) + len(SETTING_COMBINATION_MAP)]):
-            col_name = f'Q3_setting_{list(SETTING_COMBINATION_MAP)[i]}'
+            col_name = f'Q3_setting_{re.sub(r"\s", '_', list(SETTING_COMBINATION_MAP)[i])}'
             processed_row[col_name] = val
             if col_name not in feature_names:
                 feature_names.append(col_name)

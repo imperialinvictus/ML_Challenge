@@ -1,22 +1,23 @@
 import json
 
 import pandas as pd
+import re
 from sklearn.model_selection import train_test_split
 
-from config import (
+from text_cluster.config import (
     DEFAULT_DRINK_KEYWORDS,
     DEFAULT_MOVIE_KEYWORDS,
     SPICE_MAP,
     SETTING_COMBINATION_MAP,
     PERSON_COMBINATION_MAP
 )
-from parsers import (
+from text_cluster.parsers import (
     get_number_from_response,
     get_movie_vector_from_response,
     get_drink_vector_from_response,
     get_combination_vector
 )
-from clustering import create_fuzzy_clusters, create_combination_categories
+from text_cluster.clustering import create_fuzzy_clusters, create_combination_categories
 
 
 def get_response_numbers():
@@ -191,7 +192,7 @@ def make_cleaned_flattened_dataframe(input_csv_filename: str):
 
         for i, val in enumerate(
                 q3_vector[len(setting_combinations):len(setting_combinations) + len(SETTING_COMBINATION_MAP)]):
-            col_name = f'Q3_setting_{list(SETTING_COMBINATION_MAP)[i]}'
+            col_name = f'Q3_setting_{re.sub(r"\s", '_', list(SETTING_COMBINATION_MAP)[i])}'
             processed_row[col_name] = val
             if col_name not in feature_names:
                 feature_names.append(col_name)
@@ -298,7 +299,7 @@ def make_cleaned_flattened_dataframe_from_file(input_csv_filename: str, movie_fu
 
         for i, val in enumerate(
                 q3_vector[len(setting_combinations):len(setting_combinations) + len(SETTING_COMBINATION_MAP)]):
-            col_name = f'Q3_setting_{list(SETTING_COMBINATION_MAP)[i]}'
+            col_name = f'Q3_setting_{re.sub(r"\s", '_', list(SETTING_COMBINATION_MAP)[i])}'
             processed_row[col_name] = val
             if col_name not in feature_names:
                 feature_names.append(col_name)
@@ -404,7 +405,7 @@ def make_cleaned_flattened_dataframe_from_csv(input_csv: str, movie_fuzzy_cluste
 
         for i, val in enumerate(
                 q3_vector[len(setting_combinations):len(setting_combinations) + len(SETTING_COMBINATION_MAP)]):
-            col_name = f'Q3_setting_{list(SETTING_COMBINATION_MAP)[i]}'
+            col_name = f'Q3_setting_{re.sub(r"\s", '_', list(SETTING_COMBINATION_MAP)[i])}'
             processed_row[col_name] = val
             if col_name not in feature_names:
                 feature_names.append(col_name)
