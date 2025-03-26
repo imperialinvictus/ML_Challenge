@@ -31,7 +31,8 @@ def predict_all(filename: str) -> list:
         prob_sum = np.sum(tree_predictions, axis=0)
         
         # Get the class with the highest total probability
+        remap = {0: "Pizza", 1: "Shawarma", 2: "Sushi"}
         prediction = np.argmax(prob_sum)
-        predictions.append(int(prediction))
+        predictions.append(remap[int(prediction)])
     
     return predictions
