@@ -19,7 +19,7 @@ def predict_all(filename: str) -> list:
         globals()[f'tree{i}'] 
         for i in range(0, 250)
     ]
-    print(tree_functions)
+
     predictions = []
     
     for _, row in encoded_input.iterrows():
