@@ -4,19 +4,31 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import BaggingClassifier
 from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
+from sklearn.compose import ColumnTransformer
 from scipy.stats import loguniform, uniform, randint
 import os
 import csv
 from typing import Dict, Any, Tuple
 
 class RandomizedSearchModelOptimizer:
-    def __init__(self, X_train, y_train, X_valid, y_valid, X_test, y_test):
+    def __init__(self, X_train, y_train, X_valid, y_valid, X_test, y_test, columns_to_scale=None):
         self.X_train = X_train
         self.y_train = y_train
         self.X_valid = X_valid
         self.y_valid = y_valid
         self.X_test = X_test
         self.y_test = y_test
+        
+        # Default columns to scale (first three columns as specified)
+        self.columns_to_scale = columns_to_scale if columns_to_scale is not None else [0, 1, 2]
+        
+        # Create normalizer using ColumnTransformer
+        self.normalizer = ColumnTransformer(
+            transformers=[
+                ('scaler', StandardScaler(), self.columns_to_scale)
+            ],
+            remainder='passthrough'  # Leave other columns unchanged
+        )
         
         # Ensure results directory exists
         os.makedirs('results', exist_ok=True)
@@ -70,15 +82,18 @@ class RandomizedSearchModelOptimizer:
                     train_score, valid_score, test_score, bias, variance
                 ])
     
+    def normalize_data(self, X):
+        """Apply normalization to the data using ColumnTransformer"""
+        return self.normalizer.fit_transform(X)
+    
     def optimize_mlp(self, normalized: bool = False) -> Tuple[MLPClassifier, Dict[str, Any]]:
         """
         Optimize MLP Classifier with RandomizedSearchCV
         """
         # Select appropriate training data
-        X_train = self.X_train if not normalized else StandardScaler().fit_transform(self.X_train)
-        X_valid = self.X_valid if not normalized else StandardScaler().fit_transform(self.X_valid)
-        X_test = self.X_test if not normalized else StandardScaler().fit_transform(self.X_test)
-
+        X_train = self.X_train if not normalized else self.normalize_data(self.X_train)
+        X_valid = self.X_valid if not normalized else self.normalizer.transform(self.X_valid)
+        X_test = self.X_test if not normalized else self.normalizer.transform(self.X_test)
         
         # Create base MLP
         mlp = MLPClassifier(
@@ -133,9 +148,9 @@ class RandomizedSearchModelOptimizer:
         Optimize Bagging Classifier
         """
         # Select appropriate training data
-        X_train = self.X_train if not normalized else StandardScaler().fit_transform(self.X_train)
-        X_valid = self.X_valid if not normalized else StandardScaler().fit_transform(self.X_valid)
-        X_test = self.X_test if not normalized else StandardScaler().fit_transform(self.X_test)
+        X_train = self.X_train if not normalized else self.normalize_data(self.X_train)
+        X_valid = self.X_valid if not normalized else self.normalizer.transform(self.X_valid)
+        X_test = self.X_test if not normalized else self.normalizer.transform(self.X_test)
 
         # Create Bagging Classifier
         bagging = BaggingClassifier(
