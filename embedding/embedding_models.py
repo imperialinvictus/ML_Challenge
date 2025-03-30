@@ -1,11 +1,12 @@
 import argparse
 import os
 import re
-from enum import IntEnum
+from enum import Enum, IntEnum
 
 import numpy as np
 import pandas as pd
 from model2vec import StaticModel
+from sklearn.linear_model import LinearRegression
 
 
 class FoodEnum(IntEnum):
@@ -37,6 +38,13 @@ class FoodEnum(IntEnum):
         }
 
         return labels.get(self, "Unknown")
+
+
+class ModelType(Enum):
+    """Enum for model types"""
+
+    NEURAL_NETWORK = "NeuralNetwork"
+    LINEAR_REGRESSION = "LinearRegression"
 
 
 class TextEncoder:
@@ -470,17 +478,34 @@ class NeuralNetwork:
         return losses, val_losses
 
 
-def predict_all(filename):
+def get_path_in_current_file_dir(file_name: str) -> str:
+    """Get the current directory of the file"""
+    return os.path.join(os.path.dirname(__file__), file_name)
+
+
+def predict_all(filename: str, model_type: ModelType):
     """Make predictions for the data in filename"""
-    # Load model parameters
-    model_path = os.path.join(os.path.dirname(__file__), "model_params.npz")
-    try:
-        params = np.load(model_path, allow_pickle=True)
-    except FileNotFoundError:
-        print(f"Error: Model file {model_path} not found.")
-        # Fall back to random predictions
-        data = pd.read_csv(filename)
-        return [np.random.choice(["Pizza", "Shawarma", "Sushi"]) for _ in range(len(data))]
+
+    if model_type == ModelType.NEURAL_NETWORK:
+        # Use the original neural network model
+        model_path = get_path_in_current_file_dir("neural_network_model.npz")
+        try:
+            params = np.load(model_path, allow_pickle=True)
+        except FileNotFoundError:
+            print(f"Error: Model file {model_path} not found.")
+            raise
+
+    elif model_type == ModelType.LINEAR_REGRESSION:
+        try:
+            # Load the linear regression model
+            params_path = get_path_in_current_file_dir("linear_regression_model.npz")
+            params = np.load(params_path, allow_pickle=True)
+        except FileNotFoundError:
+            print(f"Error: Model file {params_path} not found.")
+            raise
+
+    else:
+        raise ValueError(f"Unknown model type: {model_type}")
 
     # Extract embeddings from params
     processor = DataProcessor(params)
@@ -491,10 +516,18 @@ def predict_all(filename):
     # Preprocess data
     X = processor.preprocess(data)
 
-    # Initialize neural network
-    model = NeuralNetwork(params=params)
+    # Make predictions using the appropriate model
+    if model_type == ModelType.NEURAL_NETWORK:
+        model = NeuralNetwork(params=params)
 
-    # Make predictions
+    elif model_type == ModelType.LINEAR_REGRESSION:
+        model = LinearRegression()
+        model.set_params(**params["model"])
+
+    else:
+        raise ValueError(f"Unknown model type: {model_type}")
+
+    # Get predicted class indices
     probabilities = model.predict(X)
     predictions = np.argmax(probabilities, axis=1)
 
@@ -514,12 +547,17 @@ def main():
     parser.add_argument(
         "filename", nargs="?", default="./cleaned_data_combined.csv", help="CSV file with data to predict"
     )
-
+    parser.add_argument(
+        "--model",
+        choices=[model.value for model in ModelType],
+        default="NeuralNetwork",
+        help="Model type to use for prediction",
+    )
     args = parser.parse_args()
 
     if args.filename:
         print(f"Making predictions for {args.filename}...")
-        predictions = predict_all(args.filename)
+        predictions = predict_all(args.filename, ModelType(args.model))
         print("Predictions:", predictions)
     else:
         parser.print_help()
