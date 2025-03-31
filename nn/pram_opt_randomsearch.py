@@ -53,7 +53,7 @@ class RandomizedSearchModelOptimizer:
         }
         
         # Results tracking file
-        self.results_file = 'results/randomized_search_pram.csv'
+        self.results_file = 'results/randomized_search_pram_2.csv'
         
     def create_results_file(self):
         """Create results file with headers if it doesn't exist"""
@@ -75,7 +75,6 @@ class RandomizedSearchModelOptimizer:
         with open(self.results_file, 'a', newline='') as f:
             writer = csv.writer(f)
             
-            # Log each parameter separately for easy filtering/analysis
             for param_name, param_value in params.items():
                 writer.writerow([
                     model_type, model_subtype, param_name, str(param_value),
@@ -97,21 +96,17 @@ class RandomizedSearchModelOptimizer:
         
         # Create base MLP
         mlp = MLPClassifier(
-            random_state=1, 
+            random_state=42, 
             n_iter_no_change=50, 
             early_stopping=True,
             validation_fraction=0.2
         )
-        
-        # Create stratified cross-validation
-        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=1)
         
         # Randomized Search
         random_search = RandomizedSearchCV(
             mlp, 
             param_distributions=self.param_dist, 
             n_iter=100, 
-            cv=cv,
             scoring='accuracy',
             n_jobs=-1,  
             random_state=42,
@@ -158,15 +153,11 @@ class RandomizedSearchModelOptimizer:
             random_state=1
         )
     
-        # Create stratified cross-validation
-        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-        
         # Randomized Search for Bagging
         bagging_random_search = RandomizedSearchCV(
             bagging,
             param_distributions=self.bagging_param_dist, 
             n_iter=30,
-            cv=cv,
             scoring='accuracy',
             n_jobs=-1,
             random_state=42,
