@@ -5,6 +5,11 @@ class NN:
     """
     Class for forward pass through the neural network
     """
+    classes = {
+        0: 'Pizza',
+        1: 'Shawarma',
+        2: 'Sushi'
+    }
     def __init__(self, filename):
         params = np.load(filename)
         self.num_layers = len([key for key in params.keys() if key.startswith('weights_')])
@@ -37,13 +42,12 @@ class NN:
                 X = X.astype(np.float64)
                 X = self.softmax(X)
         
-        return np.argmax(X, axis=1) # return the class with the highest probability
+        return [self.classes[i] for i in np.argmax(X, axis=1)] # return the class with the highest probability
 
 class BaggedNN(NN):
     """
     Class for bagged neural network
     """
-    classes = [0, 1, 2]
     
     def __init__(self, filename):
         params = np.load(filename)
@@ -76,4 +80,4 @@ class BaggedNN(NN):
             axis=1, 
             arr=all_predictions
         )
-        return final_predictions
+        return [self.classes[i] for i in final_predictions]

@@ -548,4 +548,5 @@ def get_dataframe_from_csv(pd_csv, folder_path=None, fuzzy_cutoff=90):
                                                          setting_combinations, person_combinations, fuzzy_cutoff=fuzzy_cutoff)
     return df_file
 
-save_clusters_to_file('cleaned_data_combined.csv', 'text_cluster', cutoff=85, clustering_sample_size=0.2)
+if __name__ == '__main__':
+    save_clusters_to_file('cleaned_data_combined.csv', 'text_cluster', cutoff=85, clustering_sample_size=0.2)
