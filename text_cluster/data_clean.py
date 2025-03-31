@@ -488,7 +488,7 @@ def load_dict_from_json(filename):
         return {k: set(v) if isinstance(v, list) else v for k, v in loaded.items()}
 
 
-def save_clusters_to_file(filename, folder_path=None, random_state=42, cutoff=85, minimum_size=5, test_size=0.15, clustering_sample_size=0.3):
+def save_clusters_to_file(filename, folder_path=None, random_state=42, cutoff=85, minimum_size=5, test_size=0.2, clustering_sample_size=0.2):
     data_csv_clean = pd.read_csv(filename, keep_default_na=False)
     data_csv_clean.columns = ['id', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Label']
     data_clustering, _ = train_test_split(data_csv_clean, test_size=clustering_sample_size, random_state=random_state)
@@ -547,4 +547,4 @@ def get_dataframe_from_csv(pd_csv, folder_path=None, fuzzy_cutoff=90):
                                                          setting_combinations, person_combinations, fuzzy_cutoff=fuzzy_cutoff)
     return df_file
 
-save_clusters_to_file('cleaned_data_combined.csv', 'text_cluster', cutoff=85, clustering_sample_size=0.15)
+save_clusters_to_file('cleaned_data_combined.csv', 'text_cluster', cutoff=85, clustering_sample_size=0.2)
