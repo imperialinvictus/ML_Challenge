@@ -492,9 +492,10 @@ def load_dict_from_json(filename):
 def save_clusters_to_file(filename, folder_path=None, random_state=42, cutoff=85, minimum_size=5, test_size=0.2, clustering_sample_size=0.2):
     data_csv_clean = pd.read_csv(filename, keep_default_na=False)
     data_csv_clean.columns = ['id', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Label']
-    data_clustering, _ = train_test_split(data_csv_clean, test_size=clustering_sample_size, random_state=random_state)
-    data_train_valid, data_test = train_test_split(data_csv_clean, test_size=test_size, random_state=random_state)
-    data_train, data_valid = train_test_split(data_train_valid, test_size=test_size, random_state=random_state)
+    data_csv_clean_labels = data_csv_clean['Label']
+    data_clustering, _, y_data_clustering, y__ = train_test_split(data_csv_clean, data_csv_clean_labels, test_size=clustering_sample_size, random_state=random_state, stratify=data_csv_clean_labels)
+    data_train_valid, data_test, y_train_valid, y_data_test = train_test_split(data_csv_clean, data_csv_clean_labels, test_size=test_size, random_state=random_state, stratify=data_csv_clean_labels)
+    data_train, data_valid, y_train, y_valid = train_test_split(data_train_valid, y_train_valid, test_size=test_size, random_state=random_state, stratify=y_train_valid)
 
     movie_fuzzy_clusters = create_fuzzy_clusters(data_clustering['Q5'].tolist(), add_keywords=DEFAULT_MOVIE_KEYWORDS,
                                                  cutoff=cutoff, minimum_size=minimum_size)
