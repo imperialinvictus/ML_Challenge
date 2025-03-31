@@ -1,13 +1,14 @@
 """
 Functions for clustering and categorizing response data.
 """
-import regex as re
+import re
 from collections import defaultdict
 from fuzzup import fuzz
 
 
 def create_fuzzy_clusters(response_list: list[str], add_keywords=None, cutoff=80, minimum_size=5) -> dict[str, set]:
     cleaned_response_list = [re.sub(r"[^a-z0-9\s]", '', item.strip().lower()).strip() for item in response_list]
+    
     fuzzy_clusters = fuzz.fuzzy_cluster(cleaned_response_list, cutoff=cutoff)
     cluster_dict = defaultdict(set)
     count_dict = defaultdict(int)
@@ -40,6 +41,13 @@ def create_fuzzy_clusters(response_list: list[str], add_keywords=None, cutoff=80
     for item in keys_to_delete:
         if item not in add_keywords:
             del final_clusters[item]
+
+    # remove spaces from feature names
+    cluster_keys = list(final_clusters.keys())
+    for cluster_key in cluster_keys:
+        cluster_key_no_space = re.sub(r"\s", '_', cluster_key)
+        if cluster_key != cluster_key_no_space:
+            final_clusters[cluster_key_no_space] = final_clusters.pop(cluster_key)
 
     return final_clusters
 

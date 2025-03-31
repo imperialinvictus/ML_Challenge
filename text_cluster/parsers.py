@@ -1,7 +1,8 @@
 """
 Functions for parsing survey responses
 """
-import regex as re
+import re
+import numpy as np
 # from thefuzz import fuzz as fuzzymatch
 from collections import defaultdict
 
@@ -39,7 +40,7 @@ def fuzzymatch(s1, s2):
 
 
 def clean_response(response: str) -> str:
-    return ''.join([i if ord(i) < 128 else '-' for i in response.lower().strip()])  # remove non-ascii
+    return ''.join([i if ord(i) < 128 else '-' for i in str(response).lower().strip()])  # remove non-ascii
 
 
 def get_num_from_element(element: str) -> float | None:
@@ -99,6 +100,58 @@ def get_number_from_response(response: str, item_list: bool) -> float | None:
             return commas + 1
         else:
             return len(re.findall(r"\n+", cleaned)) + 1
+
+
+def get_number_from_response_2(value: str, item_list: bool) -> float | None:
+    """Convert string to numeric value"""
+    if not value or (isinstance(value, float) and np.isnan(value)):
+        return 0.0
+
+    if not isinstance(value, str):
+        try:
+            return float(value)
+        except (ValueError, TypeError):
+            return 0.0
+
+    # Map word numbers to digits
+    # fmt: off
+    word_to_num = {
+        'zero': 0, 'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+        'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+        'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14, 'fifteen': 15,
+        'sixteen': 16, 'seventeen': 17, 'eighteen': 18, 'nineteen': 19, 'twenty': 20,
+        'thirty': 30, 'forty': 40, 'fifty': 50
+    }
+    # fmt: on
+
+    # Convert to lowercase for word matching
+    text = value.lower()
+
+    # Extract numbers (both digits and words)
+    numbers = []
+
+    # Check for word numbers
+    for word, num in word_to_num.items():
+        if word in text:
+            numbers.append(num)
+
+    # Check for digit numbers using regex
+    digit_matches = re.findall(r"\d+", text)
+    for match in digit_matches:
+        numbers.append(int(match))
+
+    # If we found any numbers, return the average
+    if numbers:
+        return sum(numbers) / len(numbers)
+    
+    if not item_list:
+        return 10  # There are no decipherable numbers in the string
+    else:  # might be ingredient list
+        commas = text.count(",")
+        if commas > 0:
+            return commas + 1
+        else:
+            return len(re.findall(r"\n+", text)) + 1
 
 
 def get_movie_vector_from_response(response: str, cutoff=90, clusters=None) -> list[int]:
