@@ -13,6 +13,7 @@ from text_cluster.config import (
 )
 from text_cluster.parsers import (
     get_number_from_response,
+    get_number_from_response_2,
     get_movie_vector_from_response,
     get_drink_vector_from_response,
     get_combination_vector
