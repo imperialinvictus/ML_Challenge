@@ -206,6 +206,9 @@ INPUT ./data/histogram_Q4.png
 INPUT ./model/main.tex
 INPUT ./model/main.tex
 INPUT model/main.tex
+INPUT ./params/main.tex
+INPUT ./params/main.tex
+INPUT params/main.tex
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT /usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map
@@ -218,9 +221,6 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmrc7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
-INPUT ./params/main.tex
-INPUT ./params/main.tex
-INPUT params/main.tex
 INPUT report.aux
 INPUT ./report.out
 INPUT ./report.out

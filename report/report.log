@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.3.8)  2 APR 2025 16:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.3.8)  2 APR 2025 16:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -475,15 +475,10 @@ File: data/histogram_Q4.png Graphic file (type png)
 <use data/histogram_Q4.png>
 Package pdftex.def Info: data/histogram_Q4.png  used on input line 52.
 (pdftex.def)             Requested size: 252.0pt x 189.00427pt.
-) (./model/main.tex)
-Underfull \hbox (badness 1953) in paragraph at lines 2--34
-[]\OT1/ptm/m/n/10 A de-scrip-tion of the model(s) that you are eval-u-at-
- []
-
-[1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
+) (./model/main.tex) (./params/main.tex) [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
- <./data/histogram_Q1.png> <./data/histogram_Q2.png> <./data/histogram_Q4.png>] (./params/main.tex) [2
+ <./data/histogram_Q1.png> <./data/histogram_Q2.png> <./data/histogram_Q4.png>] [2
 
 ] (./report.aux)
  ***********
@@ -496,13 +491,13 @@ Package rerunfilecheck Info: File `report.out' has not changed.
 Here is how much of TeX's memory you used:
  12783 strings out of 474116
  204001 string characters out of 5743683
- 1941187 words of memory out of 5000000
+ 1940187 words of memory out of 5000000
  34988 multiletter control sequences out of 15000+600000
  585175 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,6n,79p,748b,443s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,6n,79p,728b,441s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on report.pdf (2 pages, 65740 bytes).
+Output written on report.pdf (2 pages, 63068 bytes).
 PDF statistics:
  56 PDF objects out of 1000 (max. 8388607)
  43 compressed objects within 1 object stream
