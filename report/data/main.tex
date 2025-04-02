@@ -21,7 +21,7 @@
 % Q7: When you think about this food item, who does it remind you of?",
 % Q8: How much hot sauce would you add to this food item?,Label
 
-The multiple-choice questions (Q1, Q3, Q7, Q8) were split into individual one-hot features, and Q3 & Q7, which both allowed multiple answers, also had each combination represented as a one-hot feature (if they appear in the training data at least 5 times) and a feature that represented the number of selected answers.
+The multiple-choice questions (Q1, Q3, Q7, Q8) were split into individual one-hot features, and Q3 & Q7, which both allowed multiple answers, also had each combination represented as a one-hot feature (if they appear in the training data at least 5 times) alongside a feature that represented the number of selected answers.
 
 Q2 and Q4 were converted into numbers using the following logic:
 \begin{itemize}
@@ -35,7 +35,7 @@ Q5 and Q6 were more complicated free-form text answers. To generalize as broadly
 
 Another approach we adopted was using a word2vec model on the free-form questionnaire responses. Word2vec learns vector representations for words, assigning similar embeddings to words with related meanings. This captures semantic relationships in the text and allows distances between embeddings to quantify word similarity. For each free-form answer and label (pizza, sushi, shawarma), we calculated the average word vector. Each question had three features, one per food type, that recorded the cosine similarity between the free-form answer's averaged vector and the averaged vector for each label.
 
-This was all condensed into a function that took in a CSV file, split the data as described, and output a dataframe of the flattened vectors for every feature.
+This was all condensed into a function that took in a CSV file, split the data as needed, and output a dataframe of the flattened vectors for every feature.
 
 We visualized the cleaned data using histograms and boxplots to explore the data. Some questions such as Q3: "In what setting 
 would you expect this food to be served?" have multiple choice as inputs, and others such as Q5: "What movie do you think of when thinking of this food item?"
