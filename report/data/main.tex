@@ -21,13 +21,15 @@
 % Q7: When you think about this food item, who does it remind you of?",
 % Q8: How much hot sauce would you add to this food item?,Label
 
+\subsection{Cleaning}
+\label{sec:cleaning}
 The multiple-choice questions (Q1, Q3, Q7, Q8) were split into individual one-hot features, and Q3 & Q7, which both allowed multiple answers, also had each combination represented as a one-hot feature (if they appear in the training data at least 5 times) alongside a feature that represented the number of selected answers.
 
 Q2 and Q4 were converted into numbers using the following logic:
 \begin{itemize}
     \item If there is a range (two numbers with the word “to”, “and” or “-” between), then take the average
     \item Otherwise, take the first number that appears (it can handle numeric, and also written numbers up to 20)
-    \item Otherwise, if it’s the ingredients question, take the number of commas or line breaks, plus one
+    \item Otherwise, if it's the ingredients question, take the number of commas or line breaks, plus one
     \item Otherwise, return the average seen in the training
 \end{itemize}
 
@@ -39,6 +41,9 @@ For Q5, Q6, and Q7, another approach we adopted was using a word2vec model on th
 
 This was all condensed into a function that took in a CSV file, split the data as needed, and output a dataframe of the flattened vectors for every feature.
 
+
+\subsection{Exploration}
+\label{sec:exploration}
 We visualized the cleaned data using histograms and boxplots to explore the data. Some questions such as Q3: "In what setting 
 would you expect this food to be served?" have multiple choice as inputs, and others such as Q5: "What movie do you think of when thinking of this food item?"
 allow participants to type their responses. For those questions, we counted the number of occurrence for each input, and only show the top 5 responses in the graph 
@@ -48,12 +53,12 @@ so it is readable while capturing the most important information.
 Figure \ref{f:hist_q1} shows a histogram of responses for Q1: From a scale 1 to 5, how complex is it to make this food?. For Sushi, 
 the difficulty is generally higher with more inputs of 4 and 5. For Pizza, we see medium complexity(3) being the highest choice. For Shawarma,
 we see more votes in the range of 4 and 5.
-
 \begin{figure}[h]
     \centerline{\includegraphics[width=\columnwidth]{data/histogram_Q1.png}}
     \caption{Histogram for Q1: How complex is it to make the food}
     \label{f:hist_q1}
 \end{figure}
+
 
 % Q2
 In figure \ref{f:box_q2}, the boxplot illustrates the distribution of expected ingredient counts for each food class. 
@@ -98,18 +103,18 @@ Figure \ref{f:pizza_q5}, \ref{f:shawarma_q6}, \ref{f:sushi_q5} shows the top res
 For both Pizza and Sushi, we saw “none” as the most popular input. However for Shawarma we saw “Avengers” to be by far the most popular response for Shawarma, suggesting a 
 correlation between "Avengers" and "Shawarma", making Q5 a good indicator.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q5_Pizza.png}}
     \caption{Counts for Pizza for Q5: What movie do you think of when thinking of this food item?}
     \label{f:pizza_q5}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q5_Sushi.png}}
     \caption{Counts for Sushi for Q5: What movie do you think of when thinking of this food item?}
     \label{f:sushi_q5}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q5_Shawarma.png}}
     \caption{Counts for Shawarma for Q5: What movie do you think of when thinking of this food item?}
     \label{f:shawarma_q6}
@@ -122,10 +127,10 @@ With sushi participants preffered water, tea or sake. With Piazza there was a cl
 and Shawarma had a tie between water and coca cola for the most frequent response with a siginficant minority preffering juice or
 nothing at all.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q6.png}}
     \caption{Top 5 Responses for Q6}
-    \label{f:hist_q2}
+    \label{f:q6}
 \end{figure}
 
 %Q7
@@ -133,10 +138,10 @@ With regards to Q7: “when you think about this food item, who does this remind
 between the food classes. For example, the most popular response accross the three foods for Q7 was “Friends”, with the remaining
 responses being, similar in size and frequency across the three food items. Therefore we decided to remove this Q7 from the parameters. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q7.png}}
     \caption{Top 5 Responses for Q7}
-    \label{f:hist_q2}
+    \label{f:q7}
 \end{figure}
 
 We split the dataset into 3 sets: 60\% training, 20\% validation and 20\% test. This allowed us sufficient data to train the model as well as data for testing that the models generalizes to unseen data.
@@ -146,10 +151,10 @@ With regards to Q8, "How much hot sauce would you add to this food item?", the r
 high preference for a moderate amount of hot sauce when considering Shawarama. As such this was a good feature to include.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q8.png}}
     \caption{Top 5 Responses for Q8}
-    \label{f:hist_q2}
+    \label{f:q8}
 \end{figure}
 
 
