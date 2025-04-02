@@ -31,9 +31,10 @@ def plot_bagging_training_progress(models, name):
     Plot the training progress of the bagging neural network models.
     """
     fig, ax = plt.subplots(1, 2, figsize=(12, 5))
-    for _, model in enumerate(models):
+    for i, model in enumerate(models.estimators_):
+        print(models)
         plot_values(model, ax)
 
-    plt.suptitle(name)
-    plt.tight_layout()
-    plt.show()
+    # plt.suptitle(name)
+    # plt.tight_layout()
+    # plt.show()
