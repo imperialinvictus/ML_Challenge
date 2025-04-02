@@ -76,6 +76,7 @@ def train_model(model_type: ModelType, data_path: str | None = None, epochs: int
         save_params["model"] = model.get_params()
 
         model_path = get_path_in_current_file_dir("linear_regression_model.npz")
+        
     else:
         raise ValueError(f"Unknown model type: {model_type}")
 
