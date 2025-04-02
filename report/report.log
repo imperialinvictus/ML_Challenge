@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.3.8)  2 APR 2025 16:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.3.8)  2 APR 2025 16:40
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -460,22 +460,25 @@ Package caption Info: End \AtBeginDocument code.
 ** WARNING: \and is valid only when in conference or peerreviewca
 modes (line 30).
 (./data/main.tex
-<data/histogram_Q1.png, id=24, 462.528pt x 346.896pt>
+<data/histogram_Q1.png, id=25, 462.528pt x 346.896pt>
 File: data/histogram_Q1.png Graphic file (type png)
 <use data/histogram_Q1.png>
-Package pdftex.def Info: data/histogram_Q1.png  used on input line 20.
+Package pdftex.def Info: data/histogram_Q1.png  used on input line 29.
 (pdftex.def)             Requested size: 252.0pt x 189.00427pt.
-<data/histogram_Q2.png, id=26, 462.528pt x 346.896pt>
+<data/histogram_Q2.png, id=27, 462.528pt x 346.896pt>
 File: data/histogram_Q2.png Graphic file (type png)
 <use data/histogram_Q2.png>
-Package pdftex.def Info: data/histogram_Q2.png  used on input line 46.
+Package pdftex.def Info: data/histogram_Q2.png  used on input line 58.
 (pdftex.def)             Requested size: 252.0pt x 189.00427pt.
-<data/histogram_Q4.png, id=27, 462.528pt x 346.896pt>
+<data/histogram_Q4.png, id=28, 462.528pt x 346.896pt>
 File: data/histogram_Q4.png Graphic file (type png)
 <use data/histogram_Q4.png>
-Package pdftex.def Info: data/histogram_Q4.png  used on input line 52.
+Package pdftex.def Info: data/histogram_Q4.png  used on input line 64.
 (pdftex.def)             Requested size: 252.0pt x 189.00427pt.
-) (./model/main.tex) (./params/main.tex) [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
+) (./model/main.tex) (./params/main.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
  <./data/histogram_Q1.png> <./data/histogram_Q2.png> <./data/histogram_Q4.png>] [2
@@ -497,10 +500,10 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  75i,6n,79p,728b,441s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on report.pdf (2 pages, 63068 bytes).
+Output written on report.pdf (2 pages, 63401 bytes).
 PDF statistics:
- 56 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
+ 57 PDF objects out of 1000 (max. 8388607)
+ 44 compressed objects within 1 object stream
  11 named destinations out of 1000 (max. 500000)
  56 words of extra memory for PDF output out of 10000 (max. 10000000)
 

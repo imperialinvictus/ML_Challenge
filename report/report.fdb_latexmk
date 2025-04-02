@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1743625692.09575 "/Users/leoliu/Documents/code/ML_Challenge/report/report.tex" "report.pdf" "report" 1743625692.65184 0
+["pdflatex"] 1743626431.43644 "/Users/leoliu/Documents/code/ML_Challenge/report/report.tex" "report.pdf" "report" 1743626431.98039 0
   "/Users/leoliu/Documents/code/ML_Challenge/report/report.tex" 1743625691.91817 1263 a38c12793503fb4e92ae2e0fdad14a46 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -79,11 +79,11 @@
   "data/histogram_Q1.png" 1743625124.74445 15051 06639c166709f7b1ca836e6cc9e64a36 ""
   "data/histogram_Q2.png" 1743625124.9189 16039 27910e8740f0e5c85c667e855b53c0d5 ""
   "data/histogram_Q4.png" 1743625125.14166 15217 1703e55582fc113dd8858ecd00bb8b1a ""
-  "data/main.tex" 1743625528.28525 4070 2f8ce36a81345ecc9bd76911a9a3da45 ""
+  "data/main.tex" 1743626431.2244 4987 dc62206046062b8749b9e71c543caeae ""
   "model/main.tex" 1743625676.731 570 4aba8b32918521bd21fab0a3575c9e70 ""
   "params/main.tex" 1743625680.53605 1319 e4660fddc4a99c702caf45f119ac9029 ""
-  "report.aux" 1743625692.61373 1393 359a1fbe9f806e3b9f043ab49a417de1 "pdflatex"
-  "report.out" 1743625692.61427 587 8538d466e482e3833d55850390488735 "pdflatex"
+  "report.aux" 1743626431.94559 1463 4b414c0e822e940fe83b297728459103 "pdflatex"
+  "report.out" 1743626431.94602 587 8538d466e482e3833d55850390488735 "pdflatex"
   "report.tex" 1743625691.91817 1263 a38c12793503fb4e92ae2e0fdad14a46 ""
   (generated)
   "report.aux"
