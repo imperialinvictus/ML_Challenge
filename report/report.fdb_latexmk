@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1743630240.11021 "/Users/leoliu/Documents/code/ML_Challenge/report/report.tex" "report.pdf" "report" 1743630241.08463 2
+["pdflatex"] 1743630314.93744 "/Users/leoliu/Documents/code/ML_Challenge/report/report.tex" "report.pdf" "report" 1743630315.84829 2
   "/Users/leoliu/Documents/code/ML_Challenge/report/report.tex" 1743627624.47597 1530 31c387ec77f9f9b018a0e60c214fdcf8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -103,7 +103,7 @@
   "data/histogram_Q1.png" 1743625124.74445 15051 06639c166709f7b1ca836e6cc9e64a36 ""
   "data/histogram_Q2.png" 1743625124.9189 16039 27910e8740f0e5c85c667e855b53c0d5 ""
   "data/histogram_Q4.png" 1743625125.14166 15217 1703e55582fc113dd8858ecd00bb8b1a ""
-  "data/main.tex" 1743630238.84993 10087 3ef1a735b03859fd5a8337bec5a48dc1 ""
+  "data/main.tex" 1743630300.98172 10102 625111e9c56956afcf272ce66d88ea1d ""
   "data/top_5_responses_Q5_Pizza.png" 1743629763.14055 32606 68fe2d47bfb0302a5d8c86cb5f27bf14 ""
   "data/top_5_responses_Q5_Shawarma.png" 1743629763.22513 28599 bb213cbc24cabf8ce18e18c528a60b0f ""
   "data/top_5_responses_Q5_Sushi.png" 1743629763.29553 31652 eed6d67a3d0e7d22b61df02bfbd0650b ""
@@ -112,8 +112,8 @@
   "data/top_5_responses_Q8.png" 1743626459.6504 46638 4e82f59627b71f96708ebe6346d38251 ""
   "model/main.tex" 1743629758.6997 3259 39d12cf0da07ef0017dabcc68dedc8c5 ""
   "params/main.tex" 1743625680.53605 1319 e4660fddc4a99c702caf45f119ac9029 ""
-  "report.aux" 1743630241.03355 4441 ffe19dbef91cbdfaac1e317459292ef3 "pdflatex"
-  "report.out" 1743630241.03426 1002 cf55ebde96465e36274c86efdd9ecf36 "pdflatex"
+  "report.aux" 1743630315.7967 4441 ffe19dbef91cbdfaac1e317459292ef3 "pdflatex"
+  "report.out" 1743630315.79736 1002 cf55ebde96465e36274c86efdd9ecf36 "pdflatex"
   "report.tex" 1743627624.47597 1530 31c387ec77f9f9b018a0e60c214fdcf8 ""
   (generated)
   "report.aux"
