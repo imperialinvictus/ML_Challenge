@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.3.8)  2 APR 2025 16:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.3.8)  2 APR 2025 17:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -405,7 +405,8 @@ Package: wrapfig 2003/01/31  v 3.6
 File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count308
 \l__pdf_internal_box=\box58
-) (./report.aux)
+)
+No file report.aux.
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
@@ -426,7 +427,6 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
 LaTeX Font Info:    ... okay on input line 27.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 27.
 LaTeX Font Info:    ... okay on input line 27.
-
 -- Lines per column: 58 (exact).
 (/usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -448,7 +448,6 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 Package hyperref Info: Link coloring OFF on input line 27.
- (./report.out) (./report.out)
 \@outlinefile=\write3
 \openout3 = `report.out'.
 
@@ -460,50 +459,169 @@ Package caption Info: End \AtBeginDocument code.
 ** WARNING: \and is valid only when in conference or peerreviewca
 modes (line 30).
 (./data/main.tex
-<data/histogram_Q1.png, id=25, 462.528pt x 346.896pt>
+./data/main.tex:24: Misplaced alignment tab character &.
+l.24 ...into individual one-hot features, and Q3 &
+                                                   Q7, which both allowed mu...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 28.
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 28.
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+
+LaTeX Warning: Reference `f:hist_q1' on page 1 undefined on input line 46.
+
+<data/histogram_Q1.png, id=4, 462.528pt x 346.896pt>
 File: data/histogram_Q1.png Graphic file (type png)
 <use data/histogram_Q1.png>
-Package pdftex.def Info: data/histogram_Q1.png  used on input line 29.
+Package pdftex.def Info: data/histogram_Q1.png  used on input line 51.
 (pdftex.def)             Requested size: 252.0pt x 189.00427pt.
-<data/histogram_Q2.png, id=27, 462.528pt x 346.896pt>
+
+LaTeX Warning: Reference `f:box_q2' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Reference `f:hist_q2' on page 1 undefined on input line 61.
+
+<data/boxplot_Q2.png, id=6, 722.7pt x 433.62pt>
+File: data/boxplot_Q2.png Graphic file (type png)
+<use data/boxplot_Q2.png>
+Package pdftex.def Info: data/boxplot_Q2.png  used on input line 66.
+(pdftex.def)             Requested size: 252.0pt x 151.20026pt.
+<data/histogram_Q2.png, id=7, 462.528pt x 346.896pt>
 File: data/histogram_Q2.png Graphic file (type png)
 <use data/histogram_Q2.png>
-Package pdftex.def Info: data/histogram_Q2.png  used on input line 58.
+Package pdftex.def Info: data/histogram_Q2.png  used on input line 72.
 (pdftex.def)             Requested size: 252.0pt x 189.00427pt.
-<data/histogram_Q4.png, id=28, 462.528pt x 346.896pt>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
+
+
+ <./data/histogram_Q1.png> <./data/boxplot_Q2.png>]
+
+LaTeX Warning: Reference `f:hist_q4' on page 2 undefined on input line 84.
+
+<data/histogram_Q4.png, id=21, 462.528pt x 346.896pt>
 File: data/histogram_Q4.png Graphic file (type png)
 <use data/histogram_Q4.png>
-Package pdftex.def Info: data/histogram_Q4.png  used on input line 64.
+Package pdftex.def Info: data/histogram_Q4.png  used on input line 89.
 (pdftex.def)             Requested size: 252.0pt x 189.00427pt.
-) (./model/main.tex) (./params/main.tex)
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
+LaTeX Warning: Reference `f:pizza_q5' on page 2 undefined on input line 95.
 
 
- <./data/histogram_Q1.png> <./data/histogram_Q2.png> <./data/histogram_Q4.png>] [2
+LaTeX Warning: Reference `f:shawarma_q6' on page 2 undefined on input line 95.
 
-] (./report.aux)
+
+LaTeX Warning: Reference `f:sushi_q5' on page 2 undefined on input line 95.
+
+<data/top_5_responses_Q5_Pizza.png, id=22, 722.7pt x 433.62pt>
+File: data/top_5_responses_Q5_Pizza.png Graphic file (type png)
+<use data/top_5_responses_Q5_Pizza.png>
+Package pdftex.def Info: data/top_5_responses_Q5_Pizza.png  used on input line 100.
+(pdftex.def)             Requested size: 252.0pt x 151.20026pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<data/top_5_responses_Q5_Sushi.png, id=23, 722.7pt x 433.62pt>
+File: data/top_5_responses_Q5_Sushi.png Graphic file (type png)
+<use data/top_5_responses_Q5_Sushi.png>
+Package pdftex.def Info: data/top_5_responses_Q5_Sushi.png  used on input line 106.
+(pdftex.def)             Requested size: 252.0pt x 151.20026pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<data/top_5_responses_Q5_Shawarma.png, id=24, 722.7pt x 433.62pt>
+File: data/top_5_responses_Q5_Shawarma.png Graphic file (type png)
+<use data/top_5_responses_Q5_Shawarma.png>
+Package pdftex.def Info: data/top_5_responses_Q5_Shawarma.png  used on input line 111.
+(pdftex.def)             Requested size: 252.0pt x 151.20026pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<data/top_5_responses_Q6.png, id=25, 1445.4pt x 433.62pt>
+File: data/top_5_responses_Q6.png Graphic file (type png)
+<use data/top_5_responses_Q6.png>
+Package pdftex.def Info: data/top_5_responses_Q6.png  used on input line 124.
+(pdftex.def)             Requested size: 252.0pt x 75.60013pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<data/top_5_responses_Q7.png, id=26, 1445.4pt x 433.62pt>
+File: data/top_5_responses_Q7.png Graphic file (type png)
+<use data/top_5_responses_Q7.png>
+Package pdftex.def Info: data/top_5_responses_Q7.png  used on input line 135.
+(pdftex.def)             Requested size: 252.0pt x 75.60013pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<data/top_5_responses_Q8.png, id=27, 1445.4pt x 433.62pt>
+File: data/top_5_responses_Q8.png Graphic file (type png)
+<use data/top_5_responses_Q8.png>
+Package pdftex.def Info: data/top_5_responses_Q8.png  used on input line 148.
+(pdftex.def)             Requested size: 252.0pt x 75.60013pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./model/main.tex [2 <./data/histogram_Q2.png> <./data/histogram_Q4.png> <./data/top_5_responses_Q5_Pizza.png> <./data/top_5_responses_Q5_Sushi.png>]) (./params/main.tex)
+Underfull \hbox (badness 1701) in paragraph at lines 48--52
+[]\OT1/ptm/m/n/10 Ryan Shiels worked on the data clean-ing and in-put
+ []
+
+
+Underfull \hbox (badness 4441) in paragraph at lines 48--52
+\OT1/ptm/m/n/10 func-tions, and ex-plored De-ci-sion Trees/Random For-est
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--52
+
+ []
+
+[3 <./data/top_5_responses_Q5_Shawarma.png> <./data/top_5_responses_Q6.png> <./data/top_5_responses_Q7.png> <./data/top_5_responses_Q8.png>] (./report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
-Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 8538D466E482E3833D55850390488735;587.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `report.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `report.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  CF55EBDE96465E36274C86EFDD9ECF36;1002.
  ) 
 Here is how much of TeX's memory you used:
- 12783 strings out of 474116
- 204001 string characters out of 5743683
- 1940187 words of memory out of 5000000
- 34988 multiletter control sequences out of 15000+600000
- 585175 words of font info for 82 fonts, out of 8000000 for 9000
+ 12895 strings out of 474116
+ 206740 string characters out of 5743683
+ 1945187 words of memory out of 5000000
+ 35071 multiletter control sequences out of 15000+600000
+ 592217 words of font info for 104 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,6n,79p,728b,441s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on report.pdf (2 pages, 63401 bytes).
+ 75i,10n,79p,728b,444s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (3 pages, 336150 bytes).
 PDF statistics:
- 57 PDF objects out of 1000 (max. 8388607)
- 44 compressed objects within 1 object stream
- 11 named destinations out of 1000 (max. 500000)
- 56 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 87 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
+ 24 named destinations out of 1000 (max. 500000)
+ 51 words of extra memory for PDF output out of 10000 (max. 10000000)
 

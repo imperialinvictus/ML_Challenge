@@ -3,3 +3,5 @@ nn/dataset
 **/__pycache__
 .DS_Store
 *.npz
+visualizations/*
+~visualizations/plot.ipynb
