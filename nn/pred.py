@@ -18,7 +18,7 @@ def predict_all(filename, models):
         predictions[model_name] = model_predictions
 
     # TODO: delete the following block when submitting
-    expected = pd.read_csv('dataset/ai_test_y.csv')
+    expected = pd.read_csv('/dataset/ai_test_y.csv')
     for model_name, model_predictions in predictions.items():
         correct = sum(model_predictions[i] == expected.iloc[i, 1] for i in range(len(model_predictions)))
         accuracy = correct / len(model_predictions)
@@ -32,6 +32,10 @@ if __name__ == '__main__':
         "BaseNN": "models/mlp_model.npz",
         "BaggedNN": "models/bagged_model.npz",
         "NormBaseNN": "models/normMlp_model.npz",
-        "NormBaggedNN": "models/normBagged_model.npz"
+        "NormBaggedNN": "models/normBagged_model.npz",
+        "TunedBaseNN": "models/best_mlp_model.npz",
+        "TunedBaggedNN": "models/best_bagged_model.npz",
+        "TunedNormBaseNN": "models/best_normMlp_model.npz",
+        "TunedNormBaggedNN": "models/best_normBagged_model.npz"
     }
     predict_all('dataset/ai_test.csv', models)
