@@ -7,7 +7,7 @@ from enum import Enum, IntEnum
 import numpy as np
 import pandas as pd
 from model2vec import StaticModel
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression as LogisticRegressionBase
 
 
 class FoodEnum(IntEnum):
@@ -46,6 +46,7 @@ class ModelType(Enum):
 
     NEURAL_NETWORK = "NeuralNetwork"
     LINEAR_REGRESSION = "LinearRegression"
+    LOGISTIC_REGRESSION = "LogisticRegression"
 
 
 class TextEncoder:
@@ -477,6 +478,21 @@ class NeuralNetwork:
                     print(f"Epoch {epoch}, Loss: {loss:.4f}")
 
         return losses, val_losses
+    
+
+class LogisticRegression(LogisticRegressionBase):
+    """Logistic regression model with custom fit method"""
+
+    def fit_proba(self, X: np.ndarray, y: np.ndarray):
+        """Fit the logistic regression model to the data"""
+        # Convert one-hot encoded labels to integer labels
+        y_labels = np.argmax(y, axis=1)
+        # Fit the model using the superclass method
+        super().fit(X, y_labels)
+
+    def predict(self, X: np.ndarray) -> np.ndarray:
+        """Predict class probabilities for the input data"""
+        return super().predict_proba(X)
 
 
 def get_path_in_current_file_dir(file_name: str) -> str:
@@ -484,7 +500,7 @@ def get_path_in_current_file_dir(file_name: str) -> str:
     return os.path.join(os.path.dirname(__file__), file_name)
 
 
-def get_model(model_type: ModelType) -> tuple[dict, NeuralNetwork | LinearRegression]:
+def get_model(model_type: ModelType) -> tuple[dict, NeuralNetwork | LinearRegression | LogisticRegression]:
     """Get the model based on the specified type"""
     if model_type == ModelType.NEURAL_NETWORK:
         # Load the neural network model
@@ -510,6 +526,21 @@ def get_model(model_type: ModelType) -> tuple[dict, NeuralNetwork | LinearRegres
             raise
 
         assert isinstance(model, LinearRegression), "Loaded model is not a LinearRegression instance"
+        return params, model
+
+    elif model_type == ModelType.LOGISTIC_REGRESSION:
+        # Load the logistic regression model
+        params_path = get_path_in_current_file_dir("logistic_regression_model.npz")
+        model_path = get_path_in_current_file_dir("logistic_regression_model.pkl")
+        try:
+            params = np.load(params_path, allow_pickle=True)
+            with open(model_path, "rb") as f:
+                model = pickle.load(f)
+        except FileNotFoundError:
+            print(f"Error: Model file {params_path} not found.")
+            raise
+
+        assert model.__class__.__name__ == "LogisticRegression", "Loaded model is not a LogisticRegression instance"
         return params, model
 
     else:
