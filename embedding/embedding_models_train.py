@@ -1,4 +1,5 @@
 import argparse
+import pickle
 
 import numpy as np
 import pandas as pd
@@ -73,10 +74,11 @@ def train_model(model_type: ModelType, data_path: str | None = None, epochs: int
         model = LinearRegression()
         model.fit(X_train_processed, y_train)
 
-        save_params["model"] = model.get_params()
+        with open(get_path_in_current_file_dir("linear_regression_model.pkl"), "wb") as f:
+            pickle.dump(model, f)
 
         model_path = get_path_in_current_file_dir("linear_regression_model.npz")
-        
+
     else:
         raise ValueError(f"Unknown model type: {model_type}")
 

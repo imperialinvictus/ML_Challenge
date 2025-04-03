@@ -1,5 +1,6 @@
 import argparse
 import os
+import pickle
 import re
 from enum import Enum, IntEnum
 
@@ -483,11 +484,10 @@ def get_path_in_current_file_dir(file_name: str) -> str:
     return os.path.join(os.path.dirname(__file__), file_name)
 
 
-def predict_all(filename: str, model_type: ModelType):
-    """Make predictions for the data in filename"""
-
+def get_model(model_type: ModelType) -> tuple[dict, NeuralNetwork | LinearRegression]:
+    """Get the model based on the specified type"""
     if model_type == ModelType.NEURAL_NETWORK:
-        # Use the original neural network model
+        # Load the neural network model
         model_path = get_path_in_current_file_dir("neural_network_model.npz")
         try:
             params = np.load(model_path, allow_pickle=True)
@@ -495,17 +495,32 @@ def predict_all(filename: str, model_type: ModelType):
             print(f"Error: Model file {model_path} not found.")
             raise
 
+        return params, NeuralNetwork(params=params)
+
     elif model_type == ModelType.LINEAR_REGRESSION:
+        # Load the linear regression model
+        params_path = get_path_in_current_file_dir("linear_regression_model.npz")
+        model_path = get_path_in_current_file_dir("linear_regression_model.pkl")
         try:
-            # Load the linear regression model
-            params_path = get_path_in_current_file_dir("linear_regression_model.npz")
             params = np.load(params_path, allow_pickle=True)
+            with open(model_path, "rb") as f:
+                model = pickle.load(f)
         except FileNotFoundError:
             print(f"Error: Model file {params_path} not found.")
             raise
 
+        assert isinstance(model, LinearRegression), "Loaded model is not a LinearRegression instance"
+        return params, model
+
     else:
         raise ValueError(f"Unknown model type: {model_type}")
+
+
+def predict_all(filename: str, model_type: ModelType):
+    """Make predictions for the data in filename"""
+
+    # Get model and parameters
+    params, model = get_model(model_type)
 
     # Extract embeddings from params
     processor = DataProcessor(params)
@@ -515,17 +530,6 @@ def predict_all(filename: str, model_type: ModelType):
 
     # Preprocess data
     X = processor.preprocess(data)
-
-    # Make predictions using the appropriate model
-    if model_type == ModelType.NEURAL_NETWORK:
-        model = NeuralNetwork(params=params)
-
-    elif model_type == ModelType.LINEAR_REGRESSION:
-        model = LinearRegression()
-        model.set_params(**params["model"])
-
-    else:
-        raise ValueError(f"Unknown model type: {model_type}")
 
     # Get predicted class indices
     probabilities = model.predict(X)
