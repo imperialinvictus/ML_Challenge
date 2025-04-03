@@ -6,39 +6,39 @@
 The setup of our training is similar for all models:
 % Make a bullet point list
 \begin{itemize}
-    \item We used the cleaned and encoded data as described in \ref{sec:exploration}.
-    \item We split the data into training, validation and test sets using a 60/20/20 split using \href{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html}{train\_test\_split} from sklearn. We used a consistent random seed of 42 to ensure reproducibility.
-    \item We used stratified sampling to ensure that the distribution of classes is similar in both sets.
-    \item We used the same evaluation metrics for all models: accuracy, precision, recall, and F1-score.
-    \item We used \href{https://rasbt.github.io/mlxtend/user_guide/evaluate/bias_variance_decomp/}{bias\_variance\_decomp} from mlxtend to calculate the bias and variance of our models.
-    \item We used \href{https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html}{classification\_report} from sklearn to generate the classification report for our models.
+\item We used the cleaned and encoded data as described in \ref{sec:exploration}.
+\item We split the data into training, validation and test sets using a 60/20/20 split using \href{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html}{train\_test\_split} from sklearn. We used a consistent random seed of 42 to ensure reproducibility.
+\item We used stratified sampling to ensure that the distribution of classes is similar in both sets.
+\item We used the same evaluation metrics for all models: accuracy, precision, recall, and F1-score.
+\item We used \href{https://rasbt.github.io/mlxtend/user_guide/evaluate/bias_variance_decomp/}{bias\_variance\_decomp} from mlxtend to calculate the bias and variance of our models.
+\item We used \href{https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html}{classification\_report} from sklearn to generate the classification report for our models.
 
 \subsection{Neural Network}
 
-We started with training a MLPClassifier on the cleaned and encoded data as described in \ref{sec:exploration} using the default parameters by 
-\href{https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html}{sklearn}. 
+We started with training a MLPClassifier on the cleaned and encoded data as described in \ref{sec:exploration} using the default parameters by
+\href{https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html}{sklearn}.
 The default configuration is as follows:
 Hidden layer: 1 layer, 100 hidden units
 Activation: ReLu
 We achieved an 90\% validation accuracy with this base configuration without any tuning, and 87\% on the test set.
-We have also tested bagged models and normalization. Specifically, we used the sklearn \href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingClassifier.html}{BaggingClassifier} 
-with MLPClassifier as the estimator with 10 estimators. As we learned in class, we expected the bagged model to have lower variance because the prediction is the average of many MLPClassifiers. 
+We have also tested bagged models and normalization. Specifically, we used the sklearn \href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingClassifier.html}{BaggingClassifier}
+with MLPClassifier as the estimator with 10 estimators. As we learned in class, we expected the bagged model to have lower variance because the prediction is the average of many MLPClassifiers.
 This is confirmed when we performed variance bias decomposition as seen in \ref{tab:nn_bias_var}, where the bagged model has a lower variance than the non-bagged model.
 We also tried normalizing the data using the \href{https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html}{StandardScaler} from sklearn.
 We expected normalization to help the model converge faster and prevent overfitting, but it did not have a significant impact on the model accuracy.
-We think this is because the data was already cleaned and encoded, and the features were already in a similar range. 
+We think this is because the data was already cleaned and encoded, and the features were already in a similar range.
 For example, the numerical features like "How much would you expect to pay" already have similar ranges (5-20) as the categorical features like "How many ingredients would you expect to be in the food".
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{lccc}
         \hline
-        Model                     & Expected Loss & Bias   & Variance \\ 
+        Model                  & Expected Loss & Bias   & Variance \\
         \hline
-        MLP                       & 0.1356        & 0.1155 & 0.0638   \\
-        Bagging MLP               & 0.1362        & 0.1277 & 0.0543   \\
-        Normalized MLP            & 0.1368        & 0.1185 & 0.0628   \\
-        Normalized Bagging MLP    & 0.1384        & 0.1337 & 0.0530   \\
+        MLP                    & 0.1356        & 0.1155 & 0.0638   \\
+        Bagging MLP            & 0.1362        & 0.1277 & 0.0543   \\
+        Normalized MLP         & 0.1368        & 0.1185 & 0.0628   \\
+        Normalized Bagging MLP & 0.1384        & 0.1337 & 0.0530   \\
         \hline
     \end{tabular}
     \caption{Loss, Bias, and Variance for Different Models}
@@ -53,15 +53,15 @@ The F1-score for all classes was around 0.90, indicating a good balance between 
     \centering
     \begin{tabular}{lcccc}
         \hline
-        Category    & Precision & Recall & F1-score & Support \\ 
+        Category     & Precision & Recall & F1-score & Support \\
         \hline
-        Pizza       & 0.92      & 0.90   & 0.91     & 88      \\
-        Shawarma    & 0.87      & 0.91   & 0.89     & 88      \\
-        Sushi       & 0.91      & 0.89   & 0.90     & 87      \\
+        Pizza        & 0.92      & 0.90   & 0.91     & 88      \\
+        Shawarma     & 0.87      & 0.91   & 0.89     & 88      \\
+        Sushi        & 0.91      & 0.89   & 0.90     & 87      \\
         \hline
-        Accuracy    &           &        & 0.90     & 263     \\
-        Macro avg   & 0.90      & 0.90   & 0.90     & 263     \\
-        Weighted avg & 0.90     & 0.90   & 0.90     & 263     \\
+        Accuracy     &           &        & 0.90     & 263     \\
+        Macro avg    & 0.90      & 0.90   & 0.90     & 263     \\
+        Weighted avg & 0.90      & 0.90   & 0.90     & 263     \\
         \hline
     \end{tabular}
     \caption{Classification Report for Pizza, Shawarma, and Sushi}
@@ -80,15 +80,15 @@ It consistently achieved an 87\% validation accuracy. The classification report 
     \centering
     \begin{tabular}{lccc}
         \hline
-        Category & Precision & Recall & F1-score \\ 
+        Category     & Precision                              & Recall & F1-score \\
         \hline
-        Pizza    & 0.85 & 0.93 & 0.89 \\
-        Shawarma & 0.88 & 0.84 & 0.86 \\
-        Sushi    & 0.90 & 0.86 & 0.88 \\
+        Pizza        & 0.85                                   & 0.93   & 0.89     \\
+        Shawarma     & 0.88                                   & 0.84   & 0.86     \\
+        Sushi        & 0.90                                   & 0.86   & 0.88     \\
         \hline
-        Accuracy      & \multicolumn{3}{c}{0.88 (263 samples)} \\
-        Macro avg     & 0.88 & 0.88 & 0.88 \\
-        Weighted avg  & 0.88 & 0.88 & 0.88 \\
+        Accuracy     & \multicolumn{3}{c}{0.88 (263 samples)}                     \\
+        Macro avg    & 0.88                                   & 0.88   & 0.88     \\
+        Weighted avg & 0.88                                   & 0.88   & 0.88     \\
         \hline
     \end{tabular}
     \caption{Classification Report}
@@ -100,9 +100,9 @@ After comparing the loss, bias, variance decomposition to our other models, I fo
     \centering
     \begin{tabular}{ccc}
         \hline
-        Loss & Bias & Variance \\ 
+        Loss   & Bias   & Variance \\
         \hline
-        0.1380 & 0.1255 & 0.0410 \\
+        0.1380 & 0.1255 & 0.0410   \\
         \hline
     \end{tabular}
     \label{tab:loss_report}
@@ -111,5 +111,77 @@ After comparing the loss, bias, variance decomposition to our other models, I fo
 \subsection{Word Embedding - Neural Network}
 We implemented a feedforward neural network with two hidden layers consisting of 64 and 32 neurons, respectively. The hidden layers utilized ReLU activation functions, while the output layer employed a softmax activation function. The model was trained using a learning rate of 0.001 and a batch size of 32, with categorical cross-entropy as the loss function. Training was conducted over 300 epochs, achieving a validation accuracy of approximately 85\%. For feature selection, we used word similarity embeddings for questions Q5, Q6, and Q7. For Q1, Q2, and Q4, we computed the average of all numerical values in the text, and for Q3 and Q8, we employed one-hot encoded categorical vectors.
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lccc}
+        \hline
+        Category     & Precision                              & Recall & F1-score \\
+        \hline
+        Pizza        & 0.82                                   & 0.83   & 0.83     \\
+        Shawarma     & 0.91                                   & 0.82   & 0.86     \\
+        Sushi        & 0.78                                   & 0.88   & 0.83     \\
+        \hline
+        Accuracy     & \multicolumn{3}{c}{0.84 (329 samples)}                     \\
+        Macro avg    & 0.84                                   & 0.84   & 0.84     \\
+        Weighted avg & 0.84                                   & 0.84   & 0.84     \\
+        \hline
+    \end{tabular}
+    \caption{Classification Report for Word Embedding Neural Network}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccc}
+        \hline
+        Loss   & Bias   & Variance \\
+        \hline
+        0.2345 & 0.2345 & 0.0149   \\
+        \hline
+    \end{tabular}
+    \caption{Loss, Bias, and Variance for Word Embedding Neural Network}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.45\textwidth]{params/neuralnetwork_confusion.png}
+    \caption{Confusion Matrix for Neural Network}
+\end{figure}
+
 \subsection{Word Embedding - Linear Regression}
 We also evaluated a linear regression model using binary cross-entropy as the loss function. The implementation leveraged sklearn's Linear Regression module, utilizing the same feature set as the neural network. The model achieved a validation accuracy of approximately 86\%, demonstrating competitive performance. This comparison with the neural network revealed that the simpler linear regression model performed slightly better, suggesting that the features representing the dataset may not exhibit significant complexity.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lccc}
+        \hline
+        Category     & Precision                              & Recall & F1-score \\
+        \hline
+        Pizza        & 0.81                                   & 0.90   & 0.85     \\
+        Shawarma     & 0.91                                   & 0.84   & 0.87     \\
+        Sushi        & 0.87                                   & 0.86   & 0.86     \\
+        \hline
+        Accuracy     & \multicolumn{3}{c}{0.86 (329 samples)}                     \\
+        Macro avg    & 0.86                                   & 0.87   & 0.86     \\
+        Weighted avg & 0.87                                   & 0.86   & 0.86     \\
+        \hline
+    \end{tabular}
+    \caption{Classification Report for Word Embedding Linear Regression}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccc}
+        \hline
+        Loss   & Bias   & Variance \\
+        \hline
+        0.2518 & 0.2518 & 0.0091   \\
+        \hline
+    \end{tabular}
+    \caption{Loss, Bias, and Variance for Word Embedding Linear Regression}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.45\textwidth]{params/linearregression_confusion.png}
+    \caption{Confusion Matrix for Word Embedding Linear Regression}
+\end{figure}
