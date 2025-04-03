@@ -40,7 +40,7 @@ def train_model(model_type: ModelType, data_path: str | None = None, epochs: int
     y_encoded = one_hot_encode(y.to_numpy())
 
     # Split data
-    X_train, X_val, y_train, y_val = train_test_split(X, y_encoded, test_size=0.2, random_state=42)
+    X_train, X_val, y_train, y_val = train_test_split(X, y_encoded, test_size=0.2, random_state=42, stratify=y)
 
     # Preprocess data
     processor = DataProcessor()
@@ -51,7 +51,7 @@ def train_model(model_type: ModelType, data_path: str | None = None, epochs: int
 
     # Define and train neural network
     input_size = X_train_processed.shape[1]
-    hidden_sizes = [64, 32]
+    hidden_sizes = [64, 64, 64]
     output_size = 3
 
     # Save model parameters

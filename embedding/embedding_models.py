@@ -356,11 +356,11 @@ class NeuralNetwork:
             self.weights.append(np.random.randn(hidden_sizes[-1], output_size) * np.sqrt(2 / hidden_sizes[-1]))
             self.biases.append(np.zeros((1, output_size)))
 
-    def relu(self, x: np.ndarray):
+    def activation(self, x: np.ndarray):
         """ReLU activation function"""
         return np.maximum(0, x)
 
-    def relu_derivative(self, x: np.ndarray):
+    def activation_derivative(self, x: np.ndarray):
         """Derivative of ReLU"""
         return (x > 0).astype(float)
 
@@ -378,7 +378,7 @@ class NeuralNetwork:
         for i in range(len(self.weights) - 1):
             z = np.dot(activations[-1], self.weights[i]) + self.biases[i]
             z_values.append(z)
-            a = self.relu(z)
+            a = self.activation(z)
             activations.append(a)
 
         # Output layer with softmax
@@ -411,7 +411,7 @@ class NeuralNetwork:
 
         # Hidden layers
         for l in range(len(self.hidden_sizes), 0, -1):
-            delta = np.dot(delta, self.weights[l].T) * self.relu_derivative(z_values[l - 1])
+            delta = np.dot(delta, self.weights[l].T) * self.activation_derivative(z_values[l - 1])
             d_weights[l - 1] = np.dot(activations[l - 1].T, delta) / m
             d_biases[l - 1] = np.sum(delta, axis=0, keepdims=True) / m
 
