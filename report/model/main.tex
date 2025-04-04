@@ -6,18 +6,18 @@
 The setup of our training is similar for all models:
 % Make a bullet point list
 \begin{itemize}
-\item We used the cleaned and encoded data as described in \ref{sec:exploration}.
-\item We split the data into training, validation and test sets using a 60/20/20 split using \href{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html}{train\_test\_split} from sklearn. We used a consistent random seed of 42 to ensure reproducibility.
-\item We used stratified sampling to ensure that the distribution of classes is similar in both sets.
-\item We used the same evaluation metrics for all models: accuracy, precision, recall, and F1-score.
-\item We used \href{https://rasbt.github.io/mlxtend/user_guide/evaluate/bias_variance_decomp/}{bias\_variance\_decomp} from mlxtend to calculate the bias and variance of our models.
-\item We used \href{https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html}{classification\_report} from sklearn to generate the classification report for our models.
+    \item We used the cleaned and encoded data as described in \ref{sec:exploration}.
+    \item We split the data into training, validation and test sets using a 60/20/20 split using \href{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html}{train\_test\_split} from sklearn. We used a consistent random seed of 42 to ensure reproducibility.
+    \item We used stratified sampling to ensure that the distribution of classes is similar in both sets.
+    \item We used the same evaluation metrics for all models: accuracy, precision, recall, and F1-score.
+    \item We used \href{https://rasbt.github.io/mlxtend/user_guide/evaluate/bias_variance_decomp/}{bias\_variance\_decomp} from mlxtend to calculate the bias and variance of our models.
+    \item We used \href{https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html}{classification\_report} from sklearn to generate the classification report for our models.
 \end{itemize}
 
 \subsection{Multi Layer Perceptron (MLP)}
 
 We started with training a \ref{https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html}{MLPClassifier}
- on the cleaned and encoded data as described in \ref{sec:exploration} using the default parameters by
+on the cleaned and encoded data as described in \ref{sec:exploration} using the default parameters by
 sklearn.
 The default configuration is as follows:\\
 Hidden layer: 1 layer, 100 hidden units\\
@@ -73,7 +73,7 @@ The F1-score for all classes was around 0.90, indicating a good balance between 
 
 Randomized Search from sklearn.model\_selection was used to do the hyperparameter tunning for the MLPClassifier. Other tunning methods like Grid Search and
 Baysian Search were considered but they did not provide a siginficant improvement in validation accuracy compared to
-Randomized Search. 
+Randomized Search.
 
 Randomized Search works by picking hyperparameters randomly from a defined range. This method allows for encountering good hyperparameters faster and
 skips over diminishing hyperparameter tunning encounterd in Grid Search. The hyperparameters tunned were the hidden layers size, the activation functions,
@@ -86,7 +86,7 @@ we used StartifiedKFold so that comparable amounts of each class end up in each 
 When originaly tuning the model, with sizes of hiddenlayers upto (100,100,100), it was determined that the best models had hiddenlayers
 around (50,), (50,50), (100,). This information was used to then tune the hidden layers checked by Randomized Search with closer values
 to attempt to find better hidden layers sizes.
-The following were the hiddenlayers tested,  
+The following were the hiddenlayers tested,
 (30,), (40,), (50,), (60,), (75,), (100,), (20, 30), (30,30), (40,40), (50,50), (75, 75), (100, 100).
 It was also found through testing that relu was consitnatly the most commonly picked activation function out of relu, logistic and tanh.
 We tested the values for alpha and intial learning rate using liguniform between the ranges of 0.0001 to 1 and 0.0001 to 0.001 respectively.
@@ -94,10 +94,10 @@ And for iteration no change we tested 10, 25 and 50.
 
 For the bagged models we tunned the number of estimators between 10 and 50 and the max sample percentage for each estimators of 0.7, 0.8, 0.9 and 1.0.
 
-Here we have included, the validation accuracy, and the hyperparameters for the top 5 models when using Randomized Search (Have it but need to format). 
+Here we have included, the validation accuracy, and the hyperparameters for the top 5 models when using Randomized Search (Have it but need to format).
 
 
-Need to reformat V 
+Need to reformat V
 % --- Top 5 MLP Configurations (CV Score, Params) ---
 %   Rank 1: Score=0.8760, Params={'activation': 'relu', 'alpha': np.float64(0.00012414804282743965), 'early_stopping': True, 'hidden_layer_sizes': (40,), 'learning_rate_init': np.float64(0.0035503048581283078), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
 %   Rank 2: Score=0.8745, Params={'activation': 'relu', 'alpha': np.float64(0.09845129999868124), 'early_stopping': True, 'hidden_layer_sizes': (40, 50), 'learning_rate_init': np.float64(0.001656260589333597), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
@@ -352,7 +352,9 @@ After comparing the loss, bias, variance decomposition to our other models, I fo
 \end{table}
 
 \subsection{Word Embedding - Neural Network}
-We implemented a feedforward neural network with three hidden layers consisting of 64, 64, and 64 neurons, respectively. The hidden layers utilized ReLU activation functions, while the output layer employed a softmax activation function. The model was trained using a learning rate of 0.001 and a batch size of 32, with categorical cross-entropy as the loss function. Training was conducted over 300 epochs, achieving a validation accuracy of approximately 84\%. For feature selection, we used word similarity embeddings for questions Q5, Q6, and Q7. For Q1, Q2, and Q4, we computed the average of all numerical values in the text, and for Q3 and Q8, we employed one-hot encoded categorical vectors.
+We implemented a feedforward neural network with three hidden layers consisting of 64, 64, and 64 neurons, respectively. The work done here is similar to the work done on Multi-Layer Perceptron (MLP) but with a different architecture and input features.
+
+The hidden layers utilized ReLU activation functions, while the output layer employed a softmax activation function. The model was trained using a learning rate of 0.001 and a batch size of 32, with categorical cross-entropy as the loss function. Training was conducted over 300 epochs, achieving a validation accuracy of approximately 84.8\%. For feature selection, we used word similarity embeddings for questions Q5, Q6, and Q7. For Q1, Q2, and Q4, we computed the average of all numerical values in the text, and for Q3 and Q8, we employed one-hot encoded categorical vectors.
 
 We experimented with various configurations of the model, including adjustments to the number of hidden layers, neurons per layer, and activation functions. For activation functions, we tested leaky ReLU, sigmoid, and tanh. While leaky ReLU and tanh achieved validation accuracies of 82\% and 84\% respectively, the sigmoid function performed significantly worse, achieving only 65\%.
 
@@ -386,10 +388,16 @@ Additionally, we tested varying the number of hidden layers while keeping each l
     \caption{Word Embedding Neural Network}
 \end{table}
 
-\subsection{Word Embedding - Linear Regression}
-We also evaluated a linear regression model. The implementation leveraged sklearn's Linear Regression module, utilizing the same feature set as the neural network. The model achieved a validation accuracy of approximately 86\%, demonstrating competitive performance. This comparison with the neural network revealed that the simpler linear regression model performed slightly better, suggesting that the features representing the dataset may not exhibit significant complexity.
+\subsection{Word Embedding - Linear and Logistic Regression}
+We also evaluated linear regression and logistic regression models using sklearn's LinearRegression and LogisticRegression classes, applying the same feature set as the neural network. For linear regression, the target labels were represented as one-hot encoded vectors, while for logistic regression, the target labels were encoded as indices.
 
-We tested multiple hyperparameter including setting `fit\_intercept' to False and `positive' to False. Setting `fit\_intercept' to False resulted in a lower accuracy of 0.85\%, while setting `positive' to False yielded the same accuracy as the default setting.
+The linear regression model achieved a validation accuracy of approximately 86.6\%, slightly outperforming the logistic regression model, which achieved 84.8\%. We hypothesize that this difference arises because linear regression directly minimizes the loss function, whereas logistic regression relies on iterative solvers, which may introduce additional complexity. Additionally, logistic regression may be more prone to overfitting due to its higher model complexity.
+
+For linear regression, we experimented with hyperparameters such as setting `fit\_intercept` to False and `positive` to True. Disabling `fit\_intercept` resulted in a slightly lower accuracy of 85\%, while changing the `positive` parameter had no impact on accuracy, maintaining the default performance.
+
+For logistic regression, we tested various solvers, including 'lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', and 'saga'. The validation accuracies for these solvers were 83.9\%, 84.8\%, 84.2\%, 83.9\%, 83.8\%, and 83.9\%, respectively. Among these, the 'liblinear' solver performed best, achieving 84.8\% accuracy with both 'l1' and 'l2' regularization. Other solvers were tested with the default 'l2' regularization.
+
+Overall, the linear regression model demonstrated slightly better performance compared to both the neural network and logistic regression models, suggesting that the dataset's features may not require highly complex representations. Logistic regression tables are omitted here, as their results closely resemble those of linear regression but with marginally lower accuracy.
 
 \begin{table}[h]
     \centering
@@ -418,6 +426,6 @@ We tested multiple hyperparameter including setting `fit\_intercept' to False an
 \end{table}
 
 \subsection{Comparison of Word Embedding Models with Other Approaches}
-The Word Embedding Neural Network yielded an accuracy of about 84\%, with a loss of 0.2269, a bias equal to its loss (0.2269), and a variance of 0.0731. The high bias suggests that it does not capture all complexity, while the variance stays relatively moderate. The Word Embedding Linear Regression achieved a slightly higher accuracy at 86\%, accompanied by a loss of 0.2515, bias of 0.2515, and a notably lower variance of 0.0088. Though its loss was higher, the overall bias-variance profile indicates more stable predictions compared to the neural network variant.
+The Word Embedding Neural Network yielded an accuracy of about 84.8\%, with a loss of 0.2269, a bias equal to its loss (0.2269), and a variance of 0.0731. The high bias suggests that it does not capture all complexity, while the variance stays relatively moderate. The Word Embedding Linear Regression achieved a slightly higher accuracy at 86.6\%, accompanied by a loss of 0.2515, bias of 0.2515, and a notably lower variance of 0.0088. Though its loss was higher, the overall bias-variance profile indicates more stable predictions compared to the neural network variant.
 
-Compared to other models such as the MLPClassifier (90\% accuracy) and RandomForestClassifier (87\% accuracy), these word embedding approaches showed somewhat lower accuracies. The neural network had a higher variance component, while the regression model leaned toward higher bias. They both demonstrate that the selected text-based features might not require very deep representations, and simpler linear methods can yield competitive results. The neural network's complexity may not be justified given the representation of the dataset, as indicated by the performance of the linear regression model.
+Compared to other models such as the MLPClassifier (90\% accuracy) and RandomForestClassifier (87\% accuracy), these word embedding approaches showed somewhat lower accuracies. The neural network had a higher variance component, while the linear regression model leaned toward higher bias. They both demonstrate that the selected text-based features might not require very deep representations, and simpler linear methods can yield competitive results. The neural network's and logistic regression's complexity may not be justified given the representation of the dataset, as indicated by the performance of the linear regression model.

@@ -81,7 +81,7 @@ def train_model(model_type: ModelType, data_path: str | None = None, epochs: int
         model_path = get_path_in_current_file_dir("linear_regression_model.npz")
 
     elif model_type == ModelType.LOGISTIC_REGRESSION:
-        model = LogisticRegression(max_iter=1000, solver="lbfgs")
+        model = LogisticRegression(solver="liblinear", max_iter=1000)
         model.fit_proba(X_train_processed, y_train)
 
         with open(get_path_in_current_file_dir("logistic_regression_model.pkl"), "wb") as f:
