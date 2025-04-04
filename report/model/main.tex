@@ -12,14 +12,16 @@ The setup of our training is similar for all models:
 \item We used the same evaluation metrics for all models: accuracy, precision, recall, and F1-score.
 \item We used \href{https://rasbt.github.io/mlxtend/user_guide/evaluate/bias_variance_decomp/}{bias\_variance\_decomp} from mlxtend to calculate the bias and variance of our models.
 \item We used \href{https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html}{classification\_report} from sklearn to generate the classification report for our models.
+\end{itemize}
 
-\subsection{Neural Network}
+\subsection{Multi Layer Perceptron (MLP)}
 
-We started with training a MLPClassifier on the cleaned and encoded data as described in \ref{sec:exploration} using the default parameters by
-\href{https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html}{sklearn}.
-The default configuration is as follows:
-Hidden layer: 1 layer, 100 hidden units
-Activation: ReLu
+We started with training a \ref{https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html}{MLPClassifier}
+ on the cleaned and encoded data as described in \ref{sec:exploration} using the default parameters by
+sklearn.
+The default configuration is as follows:\\
+Hidden layer: 1 layer, 100 hidden units\\
+Activation: ReLu\\
 We achieved an 90\% validation accuracy with this base configuration without any tuning, and 87\% on the test set.
 We have also tested bagged models and normalization. Specifically, we used the sklearn \href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingClassifier.html}{BaggingClassifier}
 with MLPClassifier as the estimator with 10 estimators. As we learned in class, we expected the bagged model to have lower variance because the prediction is the average of many MLPClassifiers.
@@ -27,7 +29,7 @@ This is confirmed when we performed variance bias decomposition as seen in \ref{
 We also tried normalizing the data using the \href{https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html}{StandardScaler} from sklearn.
 We expected normalization to help the model converge faster and prevent overfitting, but it did not have a significant impact on the model accuracy.
 We think this is because the data was already cleaned and encoded, and the features were already in a similar range.
-For example, the numerical features like "How much would you expect to pay" already have similar ranges (5-20) as the categorical features like "How many ingredients would you expect to be in the food".
+For example, the features like "How much would you expect to pay" already have similar ranges (5-20) as features like "How many ingredients would you expect to be in the food".
 
 \begin{table}[ht]
     \centering

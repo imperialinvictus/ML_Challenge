@@ -44,7 +44,7 @@ This was all condensed into a function that took in a CSV file, split the data a
 
 \subsection{Exploration}
 \label{sec:exploration}
-We visualized the cleaned data using histograms and boxplots to explore the data. Some questions such as Q3: "In what setting 
+We used histograms and boxplots to explore the cleaned data. Some questions such as Q3: "In what setting 
 would you expect this food to be served?" have multiple choice as inputs, and others such as Q5: "What movie do you think of when thinking of this food item?"
 allow participants to type their responses. For those questions, we counted the number of occurrence for each input, and only show the top 5 responses in the graph 
 so it is readable while capturing the most important information.
@@ -92,32 +92,21 @@ In figure \ref{f:hist_q4}, we see a majority of participants expecting to pay a 
 Interestingly we see much higher outliers for sushi, with a peak of someone willing to pay ~100 dollars 
 for one serving of sushi. We also see different distributions for the three food items - pizza has a peak at 
 ~5 dollars, with a tail towards higher prices; shawarma has a normal distribution with mean at ~10 dollars.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centerline{\includegraphics[width=\columnwidth]{data/histogram_Q4.png}}
     \caption{Histogram for Q4: How much would you expect to pay for one serving of this food item?}
     \label{f:hist_q4}
 \end{figure}
 
 % Q5 What movie do you think of when thinking of this food item?
-Figure \ref{f:pizza_q5}, \ref{f:shawarma_q6}, \ref{f:sushi_q5} shows the top responses for each class for Q5.
+Figure \ref{f:q5} shows the top responses for each class for Q5.
 For both Pizza and Sushi, we saw “none” as the most popular input. However for Shawarma we saw “Avengers” to be by far the most popular response for Shawarma, suggesting a 
 correlation between "Avengers" and "Shawarma", making Q5 a good indicator.
 
 \begin{figure}[ht]
-    \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q5_Pizza.png}}
-    \caption{Counts for Pizza for Q5: What movie do you think of when thinking of this food item?}
-    \label{f:pizza_q5}
-\end{figure}
-
-\begin{figure}[ht]
-    \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q5_Sushi.png}}
-    \caption{Counts for Sushi for Q5: What movie do you think of when thinking of this food item?}
-    \label{f:sushi_q5}
-\end{figure}
-\begin{figure}[ht]
-    \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q5_Shawarma.png}}
-    \caption{Counts for Shawarma for Q5: What movie do you think of when thinking of this food item?}
-    \label{f:shawarma_q6}
+    \centerline{\includegraphics[width=\columnwidth]{data/top_5_responses_Q5.png}}
+    \caption{Counts for Q5: What movie do you think of when thinking of this food item?}
+    \label{f:q5}
 \end{figure}
 
 
@@ -143,8 +132,6 @@ responses being, similar in size and frequency across the three food items. Ther
     \caption{Top 5 Responses for Q7}
     \label{f:q7}
 \end{figure}
-
-We split the dataset into 3 sets: 60\% training, 20\% validation and 20\% test. This allowed us sufficient data to train the model as well as data for testing that the models generalizes to unseen data.
 
 %Q8
 With regards to Q8, "How much hot sauce would you add to this food item?", the responses for Piazza and Sushi were extremely similar with the responses being exactly the same, but there was a very
