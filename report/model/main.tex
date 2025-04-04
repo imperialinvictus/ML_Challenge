@@ -352,7 +352,7 @@ After comparing the loss, bias, variance decomposition to our other models, I fo
 \end{table}
 
 \subsection{Word Embedding - Neural Network}
-We implemented a feedforward neural network with three hidden layers consisting of 64, 64, and 64 neurons, respectively. The work done here is similar to the work done on Multi-Layer Perceptron (MLP) but with a different architecture and input features.
+We developed a feedforward neural network featuring three hidden layers, each comprising 64 neurons. This approach builds upon the work done with the Multi-Layer Perceptron (MLP), utilizing a distinct architecture and tailored input features to better suit the task.
 
 The hidden layers utilized ReLU activation functions, while the output layer employed a softmax activation function. The model was trained using a learning rate of 0.001 and a batch size of 32, with categorical cross-entropy as the loss function. Training was conducted over 300 epochs, achieving a validation accuracy of approximately 84.8\%. For feature selection, we used word similarity embeddings for questions Q5, Q6, and Q7. For Q1, Q2, and Q4, we computed the average of all numerical values in the text, and for Q3 and Q8, we employed one-hot encoded categorical vectors.
 
