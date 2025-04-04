@@ -111,7 +111,13 @@ After comparing the loss, bias, variance decomposition to our other models, I fo
 \end{table}
 
 \subsection{Word Embedding - Neural Network}
-We implemented a feedforward neural network with two hidden layers consisting of 64 and 32 neurons, respectively. The hidden layers utilized ReLU activation functions, while the output layer employed a softmax activation function. The model was trained using a learning rate of 0.001 and a batch size of 32, with categorical cross-entropy as the loss function. Training was conducted over 300 epochs, achieving a validation accuracy of approximately 85\%. For feature selection, we used word similarity embeddings for questions Q5, Q6, and Q7. For Q1, Q2, and Q4, we computed the average of all numerical values in the text, and for Q3 and Q8, we employed one-hot encoded categorical vectors.
+We implemented a feedforward neural network with three hidden layers consisting of 64, 64, and 64 neurons, respectively. The hidden layers utilized ReLU activation functions, while the output layer employed a softmax activation function. The model was trained using a learning rate of 0.001 and a batch size of 32, with categorical cross-entropy as the loss function. Training was conducted over 300 epochs, achieving a validation accuracy of approximately 84\%. For feature selection, we used word similarity embeddings for questions Q5, Q6, and Q7. For Q1, Q2, and Q4, we computed the average of all numerical values in the text, and for Q3 and Q8, we employed one-hot encoded categorical vectors.
+
+We experimented with various configurations of the model, including adjustments to the number of hidden layers, neurons per layer, and activation functions. For activation functions, we tested leaky ReLU, sigmoid, and tanh. While leaky ReLU and tanh achieved validation accuracies of 82\% and 84\% respectively, the sigmoid function performed significantly worse, achieving only 65\%.
+
+We also explored different hidden layer configurations. Increasing the number of neurons to 128, 64, and 64 per layer slightly reduced the accuracy to 82\% and increased training time. Reducing the neurons to 32, 16, and 16 per layer also resulted in a lower accuracy of 82\%. A configuration of 32 neurons in each of the three layers yielded a similar accuracy of 82\%.
+
+Additionally, we tested varying the number of hidden layers while keeping each layer at 64 neurons. Reducing the number of layers to 1 or 2 led to validation accuracies of 82\% and 83\%, respectively. Increasing the number of layers to 4 or 5 did not improve performance, maintaining an accuracy of 84\%.
 
 \begin{table}[h]
     \centering
@@ -119,38 +125,30 @@ We implemented a feedforward neural network with two hidden layers consisting of
         \hline
         Category     & Precision                              & Recall & F1-score \\
         \hline
-        Pizza        & 0.82                                   & 0.83   & 0.83     \\
-        Shawarma     & 0.91                                   & 0.82   & 0.86     \\
-        Sushi        & 0.78                                   & 0.88   & 0.83     \\
+        Pizza        & 0.86                                   & 0.83   & 0.85     \\
+        Shawarma     & 0.85                                   & 0.85   & 0.85     \\
+        Sushi        & 0.82                                   & 0.85   & 0.83     \\
         \hline
         Accuracy     & \multicolumn{3}{c}{0.84 (329 samples)}                     \\
         Macro avg    & 0.84                                   & 0.84   & 0.84     \\
         Weighted avg & 0.84                                   & 0.84   & 0.84     \\
-        \hline
+        \hline                                                                    \\
     \end{tabular}
-    \caption{Classification Report for Word Embedding Neural Network}
-\end{table}
-
-\begin{table}[h]
-    \centering
     \begin{tabular}{ccc}
         \hline
         Loss   & Bias   & Variance \\
         \hline
-        0.2345 & 0.2345 & 0.0149   \\
-        \hline
+        0.2269 & 0.2269 & 0.0731   \\
+        \hline                     \\
     \end{tabular}
-    \caption{Loss, Bias, and Variance for Word Embedding Neural Network}
+    \includegraphics[width=0.45\textwidth]{model/neuralnetwork_confusion.png}
+    \caption{Word Embedding Neural Network}
 \end{table}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.45\textwidth]{params/neuralnetwork_confusion.png}
-    \caption{Confusion Matrix for Neural Network}
-\end{figure}
-
 \subsection{Word Embedding - Linear Regression}
-We also evaluated a linear regression model using binary cross-entropy as the loss function. The implementation leveraged sklearn's Linear Regression module, utilizing the same feature set as the neural network. The model achieved a validation accuracy of approximately 86\%, demonstrating competitive performance. This comparison with the neural network revealed that the simpler linear regression model performed slightly better, suggesting that the features representing the dataset may not exhibit significant complexity.
+We also evaluated a linear regression model. The implementation leveraged sklearn's Linear Regression module, utilizing the same feature set as the neural network. The model achieved a validation accuracy of approximately 86\%, demonstrating competitive performance. This comparison with the neural network revealed that the simpler linear regression model performed slightly better, suggesting that the features representing the dataset may not exhibit significant complexity.
+
+We tested multiple hyperparameter including setting `fit\_intercept' to False and `positive' to False. Setting `fit\_intercept' to False resulted in a lower accuracy of 0.85\%, while setting `positive' to False yielded the same accuracy as the default setting.
 
 \begin{table}[h]
     \centering
@@ -158,32 +156,27 @@ We also evaluated a linear regression model using binary cross-entropy as the lo
         \hline
         Category     & Precision                              & Recall & F1-score \\
         \hline
-        Pizza        & 0.81                                   & 0.90   & 0.85     \\
-        Shawarma     & 0.91                                   & 0.84   & 0.87     \\
-        Sushi        & 0.87                                   & 0.86   & 0.86     \\
+        Pizza        & 0.86                                   & 0.89   & 0.87     \\
+        Shawarma     & 0.89                                   & 0.87   & 0.88     \\
+        Sushi        & 0.86                                   & 0.85   & 0.85     \\
         \hline
-        Accuracy     & \multicolumn{3}{c}{0.86 (329 samples)}                     \\
-        Macro avg    & 0.86                                   & 0.87   & 0.86     \\
-        Weighted avg & 0.87                                   & 0.86   & 0.86     \\
-        \hline
+        Accuracy     & \multicolumn{3}{c}{0.87 (329 samples)}                     \\
+        Macro avg    & 0.87                                   & 0.87   & 0.87     \\
+        Weighted avg & 0.87                                   & 0.87   & 0.87     \\
+        \hline                                                                    \\
     \end{tabular}
-    \caption{Classification Report for Word Embedding Linear Regression}
-\end{table}
-
-\begin{table}[h]
-    \centering
     \begin{tabular}{ccc}
         \hline
         Loss   & Bias   & Variance \\
         \hline
-        0.2518 & 0.2518 & 0.0091   \\
-        \hline
+        0.2515 & 0.2515 & 0.0088   \\
+        \hline                     \\
     \end{tabular}
-    \caption{Loss, Bias, and Variance for Word Embedding Linear Regression}
+    \includegraphics[width=0.45\textwidth]{model/linearregression_confusion.png}
+    \caption{Word Embedding Linear Regression}
 \end{table}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.45\textwidth]{params/linearregression_confusion.png}
-    \caption{Confusion Matrix for Word Embedding Linear Regression}
-\end{figure}
+\subsection{Comparison of Word Embedding Models with Other Approaches}
+The Word Embedding Neural Network yielded an accuracy of about 84\%, with a loss of 0.2269, a bias equal to its loss (0.2269), and a variance of 0.0731. The high bias suggests that it does not capture all complexity, while the variance stays relatively moderate. The Word Embedding Linear Regression achieved a slightly higher accuracy at 86\%, accompanied by a loss of 0.2515, bias of 0.2515, and a notably lower variance of 0.0088. Though its loss was higher, the overall bias-variance profile indicates more stable predictions compared to the neural network variant.
+
+Compared to other models such as the MLPClassifier (90\% accuracy) and RandomForestClassifier (87\% accuracy), these word embedding approaches showed somewhat lower accuracies. The neural network had a higher variance component, while the regression model leaned toward higher bias. They both demonstrate that the selected text-based features might not require very deep representations, and simpler linear methods can yield competitive results. The neural network's complexity may not be justified given the representation of the dataset, as indicated by the performance of the linear regression model.
