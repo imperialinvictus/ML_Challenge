@@ -71,6 +71,247 @@ The F1-score for all classes was around 0.90, indicating a good balance between 
 \end{table}
 
 
+Randomized Search from sklearn.model\_selection was used to do the hyperparameter tunning for the MLPClassifier. Other tunning methods like Grid Search and
+Baysian Search were considered but they did not provide a siginficant improvement in validation accuracy compared to
+Randomized Search. 
+
+Randomized Search works by picking hyperparameters randomly from a defined range. This method allows for encountering good hyperparameters faster and
+skips over diminishing hyperparameter tunning encounterd in Grid Search. The hyperparameters tunned were the hidden layers size, the activation functions,
+alpha, initial learning rate and n iter no change for early stopping as well as number of estimators and max sample percentage for bagged models.
+
+Randomized Search works by using cross validation to train and validate the model. It uses k-folds validation where it splits the dataset into k subsets using
+each subset as a validation set while training on the rest k-1 subsets. Hence, to ensure that the subsets are evenly split between the 3 classes,
+we used StartifiedKFold so that comparable amounts of each class end up in each of the k-folds .
+
+When originaly tuning the model, with sizes of hiddenlayers upto (100,100,100), it was determined that the best models had hiddenlayers
+around (50,), (50,50), (100,). This information was used to then tune the hidden layers checked by Randomized Search with closer values
+to attempt to find better hidden layers sizes.
+The following were the hiddenlayers tested,  
+(30,), (40,), (50,), (60,), (75,), (100,), (20, 30), (30,30), (40,40), (50,50), (75, 75), (100, 100).
+It was also found through testing that relu was consitnatly the most commonly picked activation function out of relu, logistic and tanh.
+We tested the values for alpha and intial learning rate using liguniform between the ranges of 0.0001 to 1 and 0.0001 to 0.001 respectively.
+And for iteration no change we tested 10, 25 and 50.
+
+For the bagged models we tunned the number of estimators between 10 and 50 and the max sample percentage for each estimators of 0.7, 0.8, 0.9 and 1.0.
+
+Here we have included, the validation accuracy, and the hyperparameters for the top 5 models when using Randomized Search (Have it but need to format). 
+
+
+Need to reformat V 
+% --- Top 5 MLP Configurations (CV Score, Params) ---
+%   Rank 1: Score=0.8760, Params={'activation': 'relu', 'alpha': np.float64(0.00012414804282743965), 'early_stopping': True, 'hidden_layer_sizes': (40,), 'learning_rate_init': np.float64(0.0035503048581283078), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
+%   Rank 2: Score=0.8745, Params={'activation': 'relu', 'alpha': np.float64(0.09845129999868124), 'early_stopping': True, 'hidden_layer_sizes': (40, 50), 'learning_rate_init': np.float64(0.001656260589333597), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
+%   Rank 3: Score=0.8738, Params={'activation': 'relu', 'alpha': np.float64(0.00011527987128232407), 'early_stopping': True, 'hidden_layer_sizes': (40,), 'learning_rate_init': np.float64(0.0027796975515266818), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
+%   Rank 4: Score=0.8730, Params={'activation': 'relu', 'alpha': np.float64(0.0014899847475658245), 'early_stopping': True, 'hidden_layer_sizes': (40,), 'learning_rate_init': np.float64(0.0021137059440645744), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
+%   Rank 5: Score=0.8730, Params={'activation': 'relu', 'alpha': np.float64(0.0026675383361699197), 'early_stopping': True, 'hidden_layer_sizes': (75, 75), 'learning_rate_init': np.float64(0.0010402587615883842), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
+
+% --- Top 5 Bagging Configurations (CV Score, Params) ---
+%   Rank 1: Score=0.8798, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.04735490946578577), 'estimator__hidden_layer_sizes': (75,), 'estimator__learning_rate_init': np.float64(0.002878805718308925), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 25, 'estimator__solver': 'adam', 'max_samples': 0.9, 'n_estimators': 44}
+%   Rank 2: Score=0.8791, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.00022592797420156976), 'estimator__hidden_layer_sizes': (20, 20), 'estimator__learning_rate_init': np.float64(0.0011006988685589537), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 25, 'estimator__solver': 'adam', 'max_samples': 1.0, 'n_estimators': 30}
+%   Rank 3: Score=0.8791, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.006295301484516136), 'estimator__hidden_layer_sizes': (40, 40), 'estimator__learning_rate_init': np.float64(0.006161049539380964), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 25, 'estimator__solver': 'adam', 'max_samples': 0.9, 'n_estimators': 24}
+%   Rank 4: Score=0.8783, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.000533703276260396), 'estimator__hidden_layer_sizes': (75,), 'estimator__learning_rate_init': np.float64(0.0017177621112338388), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 25, 'estimator__solver': 'adam', 'max_samples': 0.8, 'n_estimators': 34}
+%   Rank 5: Score=0.8783, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.0014618962793704966), 'estimator__hidden_layer_sizes': (40, 50), 'estimator__learning_rate_init': np.float64(0.0006305535040199287), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 50, 'estimator__solver': 'adam', 'max_samples': 0.8, 'n_estimators': 12}
+
+% --- Top 5 MLP Configurations (CV Score, Params) ---
+%   Rank 1: Score=0.8745, Params={'activation': 'relu', 'alpha': np.float64(0.02795015916508337), 'early_stopping': True, 'hidden_layer_sizes': (30,), 'learning_rate_init': np.float64(0.0026465731702014347), 'max_iter': 500, 'n_iter_no_change': 50, 'solver': 'adam'}
+%   Rank 2: Score=0.8745, Params={'activation': 'relu', 'alpha': np.float64(0.09845129999868124), 'early_stopping': True, 'hidden_layer_sizes': (40, 50), 'learning_rate_init': np.float64(0.001656260589333597), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
+%   Rank 3: Score=0.8730, Params={'activation': 'relu', 'alpha': np.float64(0.002386418878005608), 'early_stopping': True, 'hidden_layer_sizes': (75,), 'learning_rate_init': np.float64(0.0015930522616241021), 'max_iter': 500, 'n_iter_no_change': 50, 'solver': 'adam'}
+%   Rank 4: Score=0.8730, Params={'activation': 'relu', 'alpha': np.float64(0.00011527987128232407), 'early_stopping': True, 'hidden_layer_sizes': (40,), 'learning_rate_init': np.float64(0.0027796975515266818), 'max_iter': 500, 'n_iter_no_change': 25, 'solver': 'adam'}
+%   Rank 5: Score=0.8730, Params={'activation': 'relu', 'alpha': np.float64(0.0015326772391384116), 'early_stopping': True, 'hidden_layer_sizes': (60,), 'learning_rate_init': np.float64(0.0015696396388661157), 'max_iter': 500, 'n_iter_no_change': 50, 'solver': 'adam'}
+
+% --- Top 5 Bagging Configurations (CV Score, Params) ---
+%   Rank 1: Score=0.8814, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.040207595487498464), 'estimator__hidden_layer_sizes': (50, 50), 'estimator__learning_rate_init': np.float64(0.005323617594751502), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 25, 'estimator__solver': 'adam', 'max_samples': 0.7, 'n_estimators': 32}
+%   Rank 2: Score=0.8806, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.00022592797420156976), 'estimator__hidden_layer_sizes': (20, 20), 'estimator__learning_rate_init': np.float64(0.0011006988685589537), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 25, 'estimator__solver': 'adam', 'max_samples': 1.0, 'n_estimators': 30}
+%   Rank 3: Score=0.8798, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.000533703276260396), 'estimator__hidden_layer_sizes': (75,), 'estimator__learning_rate_init': np.float64(0.0017177621112338388), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 25, 'estimator__solver': 'adam', 'max_samples': 0.8, 'n_estimators': 34}
+%   Rank 4: Score=0.8798, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.04735490946578577), 'estimator__hidden_layer_sizes': (75,), 'estimator__learning_rate_init': np.float64(0.002878805718308925), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 25, 'estimator__solver': 'adam', 'max_samples': 0.9, 'n_estimators': 44}
+%   Rank 5: Score=0.8783, Params={'estimator__activation': 'relu', 'estimator__alpha': np.float64(0.007742116473996248), 'estimator__hidden_layer_sizes': (75,), 'estimator__learning_rate_init': np.float64(0.008778578373294493), 'estimator__max_iter': 300, 'estimator__n_iter_no_change': 50, 'estimator__solver': 'adam', 'max_samples': 0.7, 'n_estimators': 14}
+
+
+%% Table for Bias-Variance Decomposition
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{lccc}
+        \hline
+        Model                        & Expected Loss & Bias   & Variance \\
+        \hline
+        MLP                          & 0.1391        & 0.1216 & 0.0634   \\
+        Bagging MLP                  & 0.1397        & 0.1307 & 0.0552   \\
+        Normalized MLP               & 0.1391        & 0.1216 & 0.0634   \\
+        Normalized Bagging MLP       & 0.1397        & 0.1307 & 0.0552   \\
+        Tuned MLP                    & 0.1438        & 0.1246 & 0.0717   \\
+        Tuned Bagging MLP            & 0.1334        & 0.1216 & 0.0521   \\
+        Tuned Normalized MLP         & 0.1401        & 0.1064 & 0.0766   \\
+        Tuned Normalized Bagging MLP & 0.1395        & 0.1307 & 0.0558   \\
+        \hline
+    \end{tabular}
+    \caption{Bias-Variance Decomposition}
+    \label{tab:bias_variance_decomp}
+\end{table}
+
+
+%TODO determine which of the models to show
+% Table 1
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{lcccc}
+%         \hline
+%         Category     & Precision & Recall & F1-score & Support \\
+%         \hline
+%         Pizza        & 0.89      & 0.89   & 0.89     & 88      \\
+%         Shawarma     & 0.86      & 0.89   & 0.87     & 88      \\
+%         Sushi        & 0.92      & 0.89   & 0.90     & 87      \\
+%         \hline
+%         Accuracy     &           &        & 0.89     & 263     \\
+%         Macro avg    & 0.89      & 0.89   & 0.89     & 263     \\
+%         Weighted avg & 0.89      & 0.89   & 0.89     & 263     \\
+%         \hline
+%     \end{tabular}
+%     \caption{Classification Report (Model 1)}
+%     \label{tab:cr_model_1}
+% \end{table}
+
+% % Table 2
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{lcccc}
+%         \hline
+%         Category     & Precision & Recall & F1-score & Support \\
+%         \hline
+%         Pizza        & 0.96      & 0.90   & 0.93     & 88      \\
+%         Shawarma     & 0.90      & 0.91   & 0.90     & 88      \\
+%         Sushi        & 0.88      & 0.93   & 0.91     & 87      \\
+%         \hline
+%         Accuracy     &           &        & 0.91     & 263     \\
+%         Macro avg    & 0.91      & 0.91   & 0.91     & 263     \\
+%         Weighted avg & 0.91      & 0.91   & 0.91     & 263     \\
+%         \hline
+%     \end{tabular}
+%     \caption{Classification Report (Model 2)}
+%     \label{tab:cr_model_2}
+% \end{table}
+
+% % Table 3
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{lcccc}
+%         \hline
+%         Category     & Precision & Recall & F1-score & Support \\
+%         \hline
+%         Pizza        & 0.92      & 0.90   & 0.91     & 88      \\
+%         Shawarma     & 0.87      & 0.91   & 0.89     & 88      \\
+%         Sushi        & 0.91      & 0.89   & 0.90     & 87      \\
+%         \hline
+%         Accuracy     &           &        & 0.90     & 263     \\
+%         Macro avg    & 0.90      & 0.90   & 0.90     & 263     \\
+%         Weighted avg & 0.90      & 0.90   & 0.90     & 263     \\
+%         \hline
+%     \end{tabular}
+%     \caption{Classification Report (Model 3)}
+%     \label{tab:cr_model_3}
+% \end{table}
+
+% % Table 4
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{lcccc}
+%         \hline
+%         Category     & Precision & Recall & F1-score & Support \\
+%         \hline
+%         Pizza        & 0.95      & 0.93   & 0.94     & 88      \\
+%         Shawarma     & 0.94      & 0.93   & 0.94     & 88      \\
+%         Sushi        & 0.92      & 0.95   & 0.94     & 87      \\
+%         \hline
+%         Accuracy     &           &        & 0.94     & 263     \\
+%         Macro avg    & 0.94      & 0.94   & 0.94     & 263     \\
+%         Weighted avg & 0.94      & 0.94   & 0.94     & 263     \\
+%         \hline
+%     \end{tabular}
+%     \caption{Classification Report (Model 4)}
+%     \label{tab:cr_model_4}
+% \end{table}
+
+% % Table 5
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{lcccc}
+%         \hline
+%         Category     & Precision & Recall & F1-score & Support \\
+%         \hline
+%         Pizza        & 0.89      & 0.91   & 0.90     & 88      \\
+%         Shawarma     & 0.85      & 0.90   & 0.87     & 88      \\
+%         Sushi        & 0.95      & 0.87   & 0.91     & 87      \\
+%         \hline
+%         Accuracy     &           &        & 0.89     & 263     \\
+%         Macro avg    & 0.90      & 0.89   & 0.89     & 263     \\
+%         Weighted avg & 0.90      & 0.89   & 0.89     & 263     \\
+%         \hline
+%     \end{tabular}
+%     \caption{Classification Report (Model 5)}
+%     \label{tab:cr_model_5}
+% \end{table}
+
+% % Table 6
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{lcccc}
+%         \hline
+%         Category     & Precision & Recall & F1-score & Support \\
+%         \hline
+%         Pizza        & 0.98      & 0.98   & 0.98     & 88      \\
+%         Shawarma     & 0.93      & 0.95   & 0.94     & 88      \\
+%         Sushi        & 0.95      & 0.93   & 0.94     & 87      \\
+%         \hline
+%         Accuracy     &           &        & 0.95     & 263     \\
+%         Macro avg    & 0.95      & 0.95   & 0.95     & 263     \\
+%         Weighted avg & 0.95      & 0.95   & 0.95     & 263     \\
+%         \hline
+%     \end{tabular}
+%     \caption{Classification Report (Model 6)}
+%     \label{tab:cr_model_6}
+% \end{table}
+
+% % Table 7
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{lcccc}
+%         \hline
+%         Category     & Precision & Recall & F1-score & Support \\
+%         \hline
+%         Pizza        & 0.90      & 0.93   & 0.92     & 88      \\
+%         Shawarma     & 0.85      & 0.91   & 0.88     & 88      \\
+%         Sushi        & 0.95      & 0.85   & 0.90     & 87      \\
+%         \hline
+%         Accuracy     &           &        & 0.90     & 263     \\
+%         Macro avg    & 0.90      & 0.90   & 0.90     & 263     \\
+%         Weighted avg & 0.90      & 0.90   & 0.90     & 263     \\
+%         \hline
+%     \end{tabular}
+%     \caption{Classification Report (Model 7)}
+%     \label{tab:cr_model_7}
+% \end{table}
+
+% % Table 8
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{lcccc}
+%         \hline
+%         Category     & Precision & Recall & F1-score & Support \\
+%         \hline
+%         Pizza        & 0.97      & 0.98   & 0.97     & 88      \\
+%         Shawarma     & 0.94      & 0.95   & 0.95     & 88      \\
+%         Sushi        & 0.98      & 0.95   & 0.97     & 87      \\
+%         \hline
+%         Accuracy     &           &        & 0.96     & 263     \\
+%         Macro avg    & 0.96      & 0.96   & 0.96     & 263     \\
+%         Weighted avg & 0.96      & 0.96   & 0.96     & 263     \\
+%         \hline
+%     \end{tabular}
+%     \caption{Classification Report (Model 8)}
+%     \label{tab:cr_model_8}
+% \end{table}
+
+
+
 \subsection{Decision Trees}
 I tested a regular decision tree, an ensemble of decision trees, and a Random Forest model, using the built-in RandomForestClassifier from sklearn. I found the decision tree to perform the worst, and it was easier to manipulate the RandomForestClassifier’s parameters, so I decided to explore that further.
 

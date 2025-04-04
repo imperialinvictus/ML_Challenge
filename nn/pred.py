@@ -29,7 +29,7 @@ def predict_all(filename, models):
 
 if __name__ == '__main__':
     models = {
-        "BaseNN": "models/mlp_model.npz",
+        "BaseNN": "models_tunned/mlp_model.npz",
         "BaggedNN": "models/bagged_model.npz",
         "NormBaseNN": "models/normMlp_model.npz",
         "NormBaggedNN": "models/normBagged_model.npz",
